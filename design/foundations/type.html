@@ -1,0 +1,28 @@
+<!-- @dsCard group="Foundations" name="Tipografía y números" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+  body{background:#0d1117;color:#e6edf3;font:14px/1.5 system-ui,-apple-system,sans-serif;margin:0;padding:24px;max-width:560px}
+  .muted{color:#8b949e}
+  h1{font-size:24px;font-weight:800;letter-spacing:-.01em;margin:0}
+  h2{font-size:17px;font-weight:700;margin:18px 0 4px}
+  .label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#8b949e}
+  .num{font-variant-numeric:tabular-nums;font-weight:700}
+  .num-xl{font-size:32px}
+  .num-md{font-size:18px}
+  .chip{display:inline-block;font-size:12px;padding:2px 10px;border-radius:999px;background:#1e2433;border:1px solid #2a3242;font-variant-numeric:tabular-nums}
+  table{border-collapse:collapse;margin-top:8px}
+  td{padding:4px 16px 4px 0;vertical-align:baseline}
+  td:first-child{color:#8b949e;font-size:12px}
+</style></head><body>
+  <h1>Mundial 2026 — Predicciones</h1>
+  <p class="muted">Escala: título 24/800 · sección 17/700 · cuerpo 14/400 · etiqueta 11 uppercase</p>
+  <table>
+    <tr><td>Probabilidad destacada</td><td><span class="num num-xl">67<span style="font-size:18px;color:#8b949e">%</span></span></td></tr>
+    <tr><td>Probabilidad en tarjeta</td><td><span class="num num-md">1.78 – 0.66 <span class="muted" style="font-size:12px">xG</span></span></td></tr>
+    <tr><td>Marcador (chip)</td><td><span class="chip">1-0 · 17%</span> <span class="chip">2-0 · 14%</span> <span class="chip">2-1 · 11%</span></td></tr>
+    <tr><td>Etiqueta</td><td><span class="label">Grupo A · Estadio Azteca</span></td></tr>
+  </table>
+  <p class="muted" style="font-size:12px">Regla: todo número usa <code>tabular-nums</code> para que las columnas
+  de probabilidades queden alineadas. Las probabilidades siempre con el símbolo % en menor peso/color.</p>
+</body></html>

@@ -1,0 +1,42 @@
+<!-- @dsCard group="Components" name="Carrera al título" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+  body{background:#0d1117;color:#e6edf3;font:14px/1.45 system-ui,-apple-system,sans-serif;margin:0;padding:24px}
+  .card{width:560px;background:#161b27;border:1px solid #2a3242;border-radius:14px;padding:18px}
+  h3{margin:0 0 2px;font-size:16px}
+  .sub{font-size:12px;color:#8b949e;margin-bottom:14px}
+  svg text{font:11px system-ui;fill:#8b949e}
+  .rows{margin-top:14px}
+  .r{display:grid;grid-template-columns:24px 130px 1fr 52px;gap:10px;align-items:center;padding:5px 0;font-variant-numeric:tabular-nums}
+  .r .bar{height:14px;border-radius:6px;background:#1e2433;overflow:hidden}
+  .r .bar i{display:block;height:100%;border-radius:6px}
+  .r b{text-align:right}
+  .pos{color:#8b949e;font-size:12px}
+</style></head><body>
+  <div class="card">
+    <h3>Carrera al título</h3>
+    <div class="sub">P(campeón) tras cada jornada — el gráfico se redibuja con cada actualización del modelo</div>
+    <svg width="520" height="150" viewBox="0 0 520 150">
+      <line x1="36" y1="10" x2="36" y2="120" stroke="#2a3242"/>
+      <line x1="36" y1="120" x2="510" y2="120" stroke="#2a3242"/>
+      <text x="4" y="14">20%</text><text x="4" y="69">10%</text><text x="8" y="124">0%</text>
+      <text x="36" y="138">11 jun</text><text x="250" y="138">fase de grupos</text><text x="470" y="138">19 jul</text>
+      <polyline fill="none" stroke="#75aaff" stroke-width="2.5" points="36,32 130,35 230,30 330,26 430,24 510,20"/>
+      <polyline fill="none" stroke="#f4d03f" stroke-width="2.5" points="36,50 130,47 230,52 330,49 430,55 510,58"/>
+      <polyline fill="none" stroke="#e6e6e6" stroke-width="2" points="36,84 130,82 230,86 330,90 430,88 510,86"/>
+      <polyline fill="none" stroke="#7dcea0" stroke-width="2" points="36,88 130,90 230,87 330,84 430,86 510,90"/>
+      <text x="470" y="16" style="fill:#75aaff;font-weight:700">ARG</text>
+      <text x="470" y="56" style="fill:#f4d03f;font-weight:700">ESP</text>
+      <text x="470" y="82" style="fill:#e6e6e6">ING</text>
+      <text x="470" y="100" style="fill:#7dcea0">FRA</text>
+    </svg>
+    <div class="rows">
+      <div class="r"><span class="pos">1</span><span>🇦🇷 Argentina</span><div class="bar"><i style="width:80%;background:#75aaff"></i></div><b>16.0%</b></div>
+      <div class="r"><span class="pos">2</span><span>🇪🇸 España</span><div class="bar"><i style="width:64%;background:#f4d03f"></i></div><b>12.8%</b></div>
+      <div class="r"><span class="pos">3</span><span>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span><div class="bar"><i style="width:33%;background:#e6e6e6"></i></div><b>6.6%</b></div>
+      <div class="r"><span class="pos">4</span><span>🇫🇷 Francia</span><div class="bar"><i style="width:29%;background:#7dcea0"></i></div><b>5.8%</b></div>
+      <div class="r"><span class="pos">5</span><span>🇲🇦 Marruecos</span><div class="bar"><i style="width:28%;background:#e59866"></i></div><b>5.6%</b></div>
+    </div>
+  </div>
+</body></html>

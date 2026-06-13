@@ -1,0 +1,111 @@
+<!-- @dsCard group="Pages" name="Dashboard — vista Partidos" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{--bg:#0d1117;--surface:#161b27;--s2:#1e2433;--border:#2a3242;--text:#e6edf3;--muted:#8b949e;
+        --home:#22c55e;--draw:#64748b;--away:#3b82f6;--gold:#eab308}
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,sans-serif;margin:0}
+  .strip{height:4px;background:linear-gradient(90deg,#006847 0 33%,#3c3b6e 33% 66%,#d80621 66% 100%)}
+  header{display:flex;align-items:center;gap:24px;padding:14px 24px;background:var(--surface);border-bottom:1px solid var(--border)}
+  .logo{font-size:17px;font-weight:800}
+  nav{display:flex;gap:4px;flex:1}
+  nav a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;padding:7px 14px;border-radius:8px}
+  nav a.active{color:var(--text);background:var(--s2)}
+  .fresh{font-size:12px;color:var(--muted)}
+  .fresh::before{content:"●";color:var(--home);margin-right:6px}
+  main{display:grid;grid-template-columns:1fr 340px;gap:20px;padding:20px 24px;max-width:1200px;margin:0 auto}
+  h2{font-size:15px;margin:0 0 12px;display:flex;justify-content:space-between;align-items:baseline}
+  h2 small{font-size:12px;color:var(--muted);font-weight:400}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px}
+  .label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:flex;justify-content:space-between}
+  .teams{display:flex;align-items:center;justify-content:space-between;margin:8px 0 2px}
+  .team{font-size:15px;font-weight:700}
+  .vs{color:var(--muted);font-size:11px}
+  .xg{text-align:center;color:var(--muted);font-size:11px;margin-bottom:8px}
+  .xg b{color:var(--text);font-size:14px;font-variant-numeric:tabular-nums}
+  .bar{display:flex;height:22px;border-radius:7px;overflow:hidden;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+  .bar div{display:flex;align-items:center;justify-content:center;color:#0d1117}
+  .b1{background:var(--home)}.bx{background:var(--draw)}.b2{background:var(--away)}
+  .chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+  .chip{font-size:11px;padding:2px 9px;border-radius:999px;background:var(--s2);border:1px solid var(--border);font-variant-numeric:tabular-nums}
+  .chip.hot{border-color:var(--gold);color:var(--gold)}
+  aside .card{margin-bottom:14px}
+  .r{display:grid;grid-template-columns:20px 1fr 60px 44px;gap:8px;align-items:center;padding:4px 0;font-variant-numeric:tabular-nums;font-size:13px}
+  .r .bar2{height:10px;border-radius:5px;background:var(--s2);overflow:hidden}
+  .r .bar2 i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#ca8a04)}
+  .r b{text-align:right}
+  .pos{color:var(--muted);font-size:11px}
+  .tiles{display:flex;gap:8px}
+  .tile{flex:1;background:var(--s2);border-radius:8px;padding:8px 10px}
+  .tile .l{font-size:10px;text-transform:uppercase;color:var(--muted)}
+  .tile .v{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+  .tile .v.ok{color:var(--home)}
+  footer{padding:10px 24px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);text-align:center}
+</style></head><body>
+  <div class="strip"></div>
+  <header>
+    <span class="logo">⚽ Mundial 2026</span>
+    <nav><a class="active" href="#">Partidos</a><a href="#">Grupos</a><a href="#">Eliminatorias</a><a href="#">Título</a><a href="#">Modelo</a></nav>
+    <span class="fresh">Actualizado 07:00 UTC · modelo v0.2</span>
+  </header>
+  <main>
+    <section>
+      <h2>Hoy · jueves 11 de junio <small>2 partidos</small></h2>
+      <div class="grid">
+        <div class="card">
+          <div class="label"><span>Grupo A · 20:00</span><span>Estadio Azteca</span></div>
+          <div class="teams"><span class="team">🇲🇽 México</span><span class="vs">vs</span><span class="team">Sudáfrica 🇿🇦</span></div>
+          <div class="xg">goles esperados <b>1.78 – 0.66</b></div>
+          <div class="bar"><div class="b1" style="width:67%">67%</div><div class="bx" style="width:22%">22%</div><div class="b2" style="width:11%">11%</div></div>
+          <div class="chips"><span class="chip hot">1-0 · 17%</span><span class="chip">2-0 · 14%</span><span class="chip">+2.5 · 44%</span><span class="chip">BTTS · 42%</span></div>
+        </div>
+        <div class="card">
+          <div class="label"><span>Grupo A · 17:00</span><span>Estadio Akron, Zapopan</span></div>
+          <div class="teams"><span class="team">🇰🇷 Corea del Sur</span><span class="vs">vs</span><span class="team">Chequia 🇨🇿</span></div>
+          <div class="xg">goles esperados <b>1.54 – 1.19</b></div>
+          <div class="bar"><div class="b1" style="width:44%">44%</div><div class="bx" style="width:27%">27%</div><div class="b2" style="width:29%">29%</div></div>
+          <div class="chips"><span class="chip hot">1-1 · 13%</span><span class="chip">1-0 · 9%</span><span class="chip">+2.5 · 51%</span><span class="chip">BTTS · 55%</span></div>
+        </div>
+      </div>
+      <h2 style="margin-top:20px">Mañana · viernes 12 <small>2 partidos</small></h2>
+      <div class="grid">
+        <div class="card">
+          <div class="label"><span>Grupo B · 19:00</span><span>Toronto</span></div>
+          <div class="teams"><span class="team">🇨🇦 Canadá</span><span class="vs">vs</span><span class="team">Bosnia 🇧🇦</span></div>
+          <div class="xg">goles esperados <b>1.91 – 0.69</b></div>
+          <div class="bar"><div class="b1" style="width:67%">67%</div><div class="bx" style="width:22%">22%</div><div class="b2" style="width:12%">12%</div></div>
+          <div class="chips"><span class="chip hot">1-0 · 14%</span><span class="chip">2-0 · 14%</span><span class="chip">+2.5 · 48%</span></div>
+        </div>
+        <div class="card">
+          <div class="label"><span>Grupo D · 21:00</span><span>SoFi Stadium, Inglewood</span></div>
+          <div class="teams"><span class="team">🇺🇸 EE.UU.</span><span class="vs">vs</span><span class="team">Paraguay 🇵🇾</span></div>
+          <div class="xg">goles esperados <b>1.45 – 1.24</b></div>
+          <div class="bar"><div class="b1" style="width:39%">39%</div><div class="bx" style="width:27%">27%</div><div class="b2" style="width:34%">34%</div></div>
+          <div class="chips"><span class="chip hot">1-1 · 13%</span><span class="chip">1-0 · 10%</span><span class="chip">+2.5 · 47%</span></div>
+        </div>
+      </div>
+    </section>
+    <aside>
+      <div class="card">
+        <h2>Carrera al título</h2>
+        <div class="r"><span class="pos">1</span><span>🇦🇷 Argentina</span><div class="bar2"><i style="width:80%"></i></div><b>16.0%</b></div>
+        <div class="r"><span class="pos">2</span><span>🇪🇸 España</span><div class="bar2"><i style="width:64%"></i></div><b>12.8%</b></div>
+        <div class="r"><span class="pos">3</span><span>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span><div class="bar2"><i style="width:33%"></i></div><b>6.6%</b></div>
+        <div class="r"><span class="pos">4</span><span>🇫🇷 Francia</span><div class="bar2"><i style="width:29%"></i></div><b>5.8%</b></div>
+        <div class="r"><span class="pos">5</span><span>🇲🇦 Marruecos</span><div class="bar2"><i style="width:28%"></i></div><b>5.6%</b></div>
+      </div>
+      <div class="card">
+        <h2>Salud del modelo</h2>
+        <div class="tiles">
+          <div class="tile"><div class="l">Evaluados</div><div class="v">0</div></div>
+          <div class="tile"><div class="l">Log-loss</div><div class="v ok">—</div></div>
+          <div class="tile"><div class="l">Aciertos</div><div class="v">—</div></div>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin:8px 0 0">La evaluación aparece tras la primera jornada terminada.</p>
+      </div>
+    </aside>
+  </main>
+  <footer>Predicciones congeladas al inicio de cada partido · prediction log público · ensamble Elo-Davidson + Dixon-Coles</footer>
+</body></html>

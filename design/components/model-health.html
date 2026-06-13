@@ -1,0 +1,32 @@
+<!-- @dsCard group="Components" name="Salud del modelo" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+  body{background:#0d1117;color:#e6edf3;font:14px/1.45 system-ui,-apple-system,sans-serif;margin:0;padding:24px}
+  .card{width:560px;background:#161b27;border:1px solid #2a3242;border-radius:14px;padding:18px}
+  h3{margin:0 0 2px;font-size:16px}
+  .sub{font-size:12px;color:#8b949e;margin-bottom:14px}
+  .tiles{display:flex;gap:12px;margin-bottom:16px}
+  .tile{flex:1;background:#1e2433;border-radius:10px;padding:12px}
+  .tile .label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#8b949e}
+  .tile .v{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}
+  .tile .d{font-size:11px;color:#22c55e}
+  .row{display:grid;grid-template-columns:1fr 56px 76px 86px;gap:8px;padding:7px 0;border-bottom:1px solid #1e2433;font-size:13px;font-variant-numeric:tabular-nums;align-items:center}
+  .row:last-child{border:none}
+  .h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8b949e;border-bottom:1px solid #2a3242}
+  .ok{color:#22c55e;font-weight:700}.bad{color:#ef4444;font-weight:700}
+  .muted{color:#8b949e}
+</style></head><body>
+  <div class="card">
+    <h3>Salud del modelo</h3>
+    <div class="sub">Predicciones congeladas al inicio de cada partido vs. resultado real (datos del ensayo)</div>
+    <div class="tiles">
+      <div class="tile"><div class="label">Partidos evaluados</div><div class="v">2</div></div>
+      <div class="tile"><div class="label">Log-loss acumulado</div><div class="v">0.859</div><div class="d">▼ mejor que uniforme (1.099)</div></div>
+      <div class="tile"><div class="label">Aciertos (modal)</div><div class="v">50%</div></div>
+    </div>
+    <div class="row h"><span>Partido</span><span>Real</span><span>Salió</span><span>Log-loss</span></div>
+    <div class="row"><span>🇲🇽 México – Sudáfrica 🇿🇦</span><span>2-0</span><span class="ok">local ✓</span><span>0.405 <span class="ok">ACIERTO</span></span></div>
+    <div class="row"><span>🇰🇷 Corea del Sur – Chequia 🇨🇿</span><span>1-1</span><span class="muted">empate</span><span>1.313 <span class="bad">fallo</span></span></div>
+  </div>
+</body></html>

@@ -1,0 +1,21 @@
+# Tabla canónica de selecciones.
+# Canónico = nombre usado por el dataset martj42/international_results.
+# aliases: variantes que usan otras fuentes (FIFA, ESPN, Transfermarkt...) -> canónico
+aliases:
+  Czechia: Czech Republic
+  "Türkiye": Turkey
+  "Turkiye": Turkey
+  "Congo DR": DR Congo
+  "Congo, Democratic Republic": DR Congo
+  USA: United States
+  "United States of America": United States
+  "Korea Republic": South Korea
+  "Korea, South": South Korea
+  "Cabo Verde": Cape Verde
+  "Bosnia-Herzegovina": Bosnia and Herzegovina
+  "IR Iran": Iran
+  "Côte d'Ivoire": Ivory Coast
+  "Cote d'Ivoire": Ivory Coast
+  "Curacao": "Curaçao"
+  "Saint Kitts and Nevis": St. Kitts and Nevis
+  "Republic of Ireland": Ireland

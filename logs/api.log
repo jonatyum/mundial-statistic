@@ -1,0 +1,36 @@
+INFO:     Started server process [68869]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8026 (Press CTRL+C to quit)
+INFO:     127.0.0.1:54719 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54720 - "GET /matches?group=D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54721 - "GET /champion HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54830 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54830 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [68869]
+INFO:     Started server process [70044]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8026 (Press CTRL+C to quit)
+INFO:     127.0.0.1:55835 - "GET /health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [70044]
+INFO:     Started server process [70825]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8026 (Press CTRL+C to quit)
+INFO:     127.0.0.1:56183 - "GET /health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [70825]
+INFO:     Started server process [17717]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8026 (Press CTRL+C to quit)
+INFO:     127.0.0.1:63143 - "GET /health HTTP/1.1" 200 OK

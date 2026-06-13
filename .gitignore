@@ -1,0 +1,22 @@
+# datos crudos e intermedios (inmutables, regenerables por ingesta)
+data/raw/
+data/interim/
+data/snapshots/
+
+# secretos
+.env
+
+# modelos serializados
+models/*.pkl
+models/*.joblib
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# IDE / OS
+.idea/
+.DS_Store

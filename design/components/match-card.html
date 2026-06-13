@@ -1,0 +1,53 @@
+<!-- @dsCard group="Components" name="Tarjeta de partido" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+  body{background:#0d1117;color:#e6edf3;font:14px/1.45 system-ui,-apple-system,sans-serif;margin:0;padding:24px;display:flex;gap:16px;flex-wrap:wrap}
+  .card{width:340px;background:#161b27;border:1px solid #2a3242;border-radius:14px;padding:16px}
+  .label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#8b949e;display:flex;justify-content:space-between}
+  .teams{display:flex;align-items:center;justify-content:space-between;margin:10px 0 2px}
+  .team{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .vs{color:#8b949e;font-size:12px}
+  .xg{text-align:center;color:#8b949e;font-size:12px;margin-bottom:10px}
+  .xg b{color:#e6edf3;font-size:15px;font-variant-numeric:tabular-nums}
+  .bar{display:flex;height:26px;border-radius:8px;overflow:hidden;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+  .bar div{display:flex;align-items:center;justify-content:center;color:#0d1117}
+  .b1{background:#22c55e}.bx{background:#64748b}.b2{background:#3b82f6}
+  .legend{display:flex;justify-content:space-between;font-size:11px;color:#8b949e;margin:4px 2px 12px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{font-size:12px;padding:3px 10px;border-radius:999px;background:#1e2433;border:1px solid #2a3242;font-variant-numeric:tabular-nums}
+  .chip.hot{border-color:#eab308;color:#eab308}
+  .foot{display:flex;gap:6px;margin-top:12px;font-size:11px;color:#8b949e}
+  .badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px}
+  .badge.ok{background:rgba(34,197,94,.15);color:#22c55e}
+  .badge.played{background:rgba(234,179,8,.15);color:#eab308}
+  .result{font-size:22px;font-weight:800;text-align:center;margin:2px 0 8px;font-variant-numeric:tabular-nums}
+</style></head><body>
+
+  <!-- variante: pendiente -->
+  <div class="card">
+    <div class="label"><span>Grupo A · 11 jun</span><span>Estadio Azteca, CDMX</span></div>
+    <div class="teams"><span class="team">🇲🇽 México</span><span class="vs">vs</span><span class="team">Sudáfrica 🇿🇦</span></div>
+    <div class="xg">goles esperados <b>1.78 – 0.66</b></div>
+    <div class="bar"><div class="b1" style="width:67%">67%</div><div class="bx" style="width:22%">22%</div><div class="b2" style="width:11%">11%</div></div>
+    <div class="legend"><span>● México</span><span>empate</span><span>Sudáfrica ●</span></div>
+    <div class="chips">
+      <span class="chip hot">1-0 · 17%</span><span class="chip">2-0 · 14%</span><span class="chip">2-1 · 11%</span>
+    </div>
+    <div class="foot"><span class="chip">+2.5 goles · 44%</span><span class="chip">ambos anotan · 42%</span></div>
+  </div>
+
+  <!-- variante: jugado, con evaluación -->
+  <div class="card">
+    <div class="label"><span>Grupo A · 11 jun</span><span class="badge played">JUGADO</span></div>
+    <div class="teams"><span class="team">🇰🇷 Corea del Sur</span><span class="vs">—</span><span class="team">Chequia 🇨🇿</span></div>
+    <div class="result">1 – 1</div>
+    <div class="bar"><div class="b1" style="width:44%">44%</div><div class="bx" style="width:27%">27%</div><div class="b2" style="width:29%">29%</div></div>
+    <div class="legend"><span>pronóstico congelado al inicio</span></div>
+    <div class="chips">
+      <span class="chip hot">pronóstico modal: 1-1 ✓</span>
+      <span class="badge ok">log-loss 1.31</span>
+    </div>
+  </div>
+
+</body></html>

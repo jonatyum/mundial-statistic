@@ -1,0 +1,44 @@
+<!-- @dsCard group="Foundations" name="Colores" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+  :root{
+    --bg:#0d1117; --surface:#161b27; --surface-2:#1e2433; --border:#2a3242;
+    --text:#e6edf3; --muted:#8b949e;
+    --home:#22c55e; --draw:#64748b; --away:#3b82f6;
+    --gold:#eab308; --danger:#ef4444;
+    --mx:#006847; --us:#3c3b6e; --ca:#d80621;
+  }
+  body{background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,sans-serif;margin:0;padding:24px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:20px 0 10px}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .sw{width:130px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  .sw .c{height:56px}
+  .sw .l{padding:8px 10px;background:var(--surface)}
+  .sw .l b{display:block;font-size:12px}
+  .sw .l span{font-size:11px;color:var(--muted);font-family:ui-monospace,monospace}
+  .strip{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--mx) 0 33%,var(--us) 33% 66%,var(--ca) 66% 100%);margin-bottom:18px}
+</style></head><body>
+  <div class="strip"></div>
+  <h2>Superficies</h2>
+  <div class="row">
+    <div class="sw"><div class="c" style="background:#0d1117"></div><div class="l"><b>bg</b><span>#0D1117</span></div></div>
+    <div class="sw"><div class="c" style="background:#161b27"></div><div class="l"><b>surface</b><span>#161B27</span></div></div>
+    <div class="sw"><div class="c" style="background:#1e2433"></div><div class="l"><b>surface-2</b><span>#1E2433</span></div></div>
+    <div class="sw"><div class="c" style="background:#2a3242"></div><div class="l"><b>border</b><span>#2A3242</span></div></div>
+  </div>
+  <h2>Resultado 1X2 (semántica fija en toda la app)</h2>
+  <div class="row">
+    <div class="sw"><div class="c" style="background:#22c55e"></div><div class="l"><b>local</b><span>#22C55E</span></div></div>
+    <div class="sw"><div class="c" style="background:#64748b"></div><div class="l"><b>empate</b><span>#64748B</span></div></div>
+    <div class="sw"><div class="c" style="background:#3b82f6"></div><div class="l"><b>visita</b><span>#3B82F6</span></div></div>
+    <div class="sw"><div class="c" style="background:#eab308"></div><div class="l"><b>oro / campeón</b><span>#EAB308</span></div></div>
+    <div class="sw"><div class="c" style="background:#ef4444"></div><div class="l"><b>fallo / alerta</b><span>#EF4444</span></div></div>
+  </div>
+  <h2>Acento tri-anfitrión (solo decorativo: strip superior)</h2>
+  <div class="row">
+    <div class="sw"><div class="c" style="background:#006847"></div><div class="l"><b>México</b><span>#006847</span></div></div>
+    <div class="sw"><div class="c" style="background:#3c3b6e"></div><div class="l"><b>EE.UU.</b><span>#3C3B6E</span></div></div>
+    <div class="sw"><div class="c" style="background:#d80621"></div><div class="l"><b>Canadá</b><span>#D80621</span></div></div>
+  </div>
+</body></html>

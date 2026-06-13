@@ -1,0 +1,33 @@
+# Configuración global del proyecto
+seed: 2026
+
+paths:
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  predictions: data/predictions
+  snapshots: data/snapshots
+
+sources:
+  # Mirror en GitHub del dataset Kaggle "International football results 1872-..."
+  results_csv: https://raw.githubusercontent.com/martj42/international_results/master/results.csv
+  shootouts_csv: https://raw.githubusercontent.com/martj42/international_results/master/shootouts.csv
+
+elo:
+  initial: 1500.0
+  # K por importancia del torneo (convención eloratings.net)
+  k_world_cup: 60
+  k_continental: 50
+  k_qualifier: 40
+  k_friendly: 20
+  home_advantage: 80   # puntos Elo sumados al local real (no en sede neutral)
+
+dixon_coles:
+  xi: 0.0019           # decaimiento temporal por día
+  max_goals: 10        # truncamiento de la matriz de marcadores
+  train_years: 8       # ventana de entrenamiento hacia atrás
+
+simulation:
+  n_sims: 100000
+  extra_time_factor: 0.31   # lambda de prórroga ≈ (30/90) * factor conservador
+  penalty_base: 0.5         # P(ganar penales) base, ajustada por Elo
