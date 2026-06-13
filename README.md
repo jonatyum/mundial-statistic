@@ -28,7 +28,21 @@ actuales en [`REPORT.md`](REPORT.md).
 - ⏳ Pendiente (ver roadmap en ARCHITECTURE.md): features de jugadores, GBM,
   bayesiano jerárquico, alineaciones en vivo.
 
-## Uso
+## Web pública (GitHub Pages)
+
+El sitio estático vive en `docs/index.html` (mismo diseño que el dashboard,
+con datos embebidos + JS para filtros, desplegables, gráficos y marcadores en
+vivo de ESPN). GitHub Actions lo regenera 3×/día y lo publica.
+
+```bash
+.venv/bin/python scripts/build_site.py   # regenera docs/ desde los CSV
+```
+
+Activar Pages (una vez): repo → **Settings → Pages → Source: Deploy from a
+branch → Branch: main / carpeta /docs → Save**. La URL queda en
+`https://<usuario>.github.io/mundial-statistic/`.
+
+## Uso local
 
 **Todo en un comando (desde la raíz del proyecto):**
 

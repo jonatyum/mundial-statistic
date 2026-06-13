@@ -26,10 +26,13 @@ jobs:
       - name: Reentrenar y re-simular con datos frescos
         run: .venv/bin/python scripts/run_pipeline.py --fresh
 
-      - name: Commit de datos actualizados
+      - name: Generar el sitio estático (GitHub Pages)
+        run: .venv/bin/python scripts/build_site.py
+
+      - name: Commit de datos y sitio actualizados
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/processed data/predictions REPORT.md
-          git diff --cached --quiet || git commit -m "datos: actualización automática [skip ci]"
+          git add data/processed data/predictions REPORT.md docs
+          git diff --cached --quiet || git commit -m "datos+web: actualización automática [skip ci]"
           git push
