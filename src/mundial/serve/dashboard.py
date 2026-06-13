@@ -3,6 +3,7 @@
 Uso: .venv/bin/streamlit run src/mundial/serve/dashboard.py
 Diseño: design system "Mundial 2026" (design/ y claude.ai/design).
 """
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -12,6 +13,8 @@ import streamlit as st
 
 ROOT = Path(__file__).resolve().parents[3]
 PROC = ROOT / "data" / "processed"
+# que `import mundial.*` funcione en Streamlit Cloud sin editable-install
+sys.path.insert(0, str(ROOT / "src"))
 
 C = {"bg": "#0d1117", "surface": "#161b27", "s2": "#1e2433", "border": "#2a3242",
      "text": "#e6edf3", "muted": "#8b949e", "home": "#22c55e", "draw": "#64748b",

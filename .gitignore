@@ -5,6 +5,10 @@ data/snapshots/
 
 # secretos
 .env
+.streamlit/secrets.toml
+
+# logs locales (api.log, dashboard.log, update.log)
+logs/
 
 # modelos serializados
 models/*.pkl

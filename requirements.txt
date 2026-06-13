@@ -1,0 +1,9 @@
+# Dependencias para desplegar el dashboard en Streamlit Community Cloud.
+# (La API FastAPI no se despliega aquí; el pipeline usa pyproject.toml.)
+streamlit>=1.58
+plotly>=6.0
+pandas>=2.2
+numpy>=2.0
+scipy>=1.14
+pyyaml>=6.0
+requests>=2.32
