@@ -5,3 +5,5 @@ date,home,away,p_home,p_draw,p_away,model_version,result,outcome,log_loss,brier,
 2026-06-12,United States,Paraguay,0.3885,0.2744,0.3371,0.2.0+nogit,4-1,local,0.9455,0.5629,True,0.9221,0.5669,1.0986
 2026-06-13,Qatar,Switzerland,0.1027,0.1963,0.701,0.2.0+nogit,1-1,empate,1.6281,1.1479,False,1.0633,0.6831,1.0986
 2026-06-13,Brazil,Morocco,0.336,0.2953,0.3687,0.2.0+nogit,1-1,empate,1.2198,0.7454,False,1.0894,0.6935,1.0986
+2026-06-13,Haiti,Scotland,0.2949,0.266,0.4391,0.2.0+nogit,0-1,visita,0.823,0.4723,True,1.0514,0.6619,1.0986
+2026-06-13,Australia,Turkey,0.359,0.2824,0.3586,0.2.0+nogit,2-0,local,1.0244,0.6192,True,1.048,0.6565,1.0986
