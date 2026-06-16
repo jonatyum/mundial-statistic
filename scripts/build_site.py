@@ -79,6 +79,7 @@ def main():
         "champion_history": records(load("champion_history")),
         "champion_now": records(load("tournament_probabilities"), "team"),
         "calibration": records(load("calibration")),
+        "model_comparison": records(load("model_comparison")),
         "flags": FLAG,
         "aliases": ALIASES,
         "names_es": teams.get("names_es", {}),

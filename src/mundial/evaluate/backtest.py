@@ -73,6 +73,54 @@ def run(year: int, df: pd.DataFrame | None = None, weights=(0.0, 0.25, 0.5, 0.75
     return BacktestResult(year, len(outcomes), table, probs, outcomes)
 
 
+def live_model_comparison(df: pd.DataFrame | None = None, w: float = 0.5,
+                          start: str = "2026-06-11",
+                          season_start: str = "2026-06-01") -> pd.DataFrame:
+    """Compara cada modelo sobre los partidos YA JUGADOS del Mundial 2026.
+
+    Entrena SOLO con datos anteriores al inicio del torneo (anti-fuga) y evalúa
+    Elo-Davidson, Dixon-Coles, el ensamble de producción (peso `w`) y el baseline
+    uniforme. Una fila por modelo, ordenadas por log-loss (mejor primero).
+    Vacío mientras no haya partidos terminados. `df` inyectable para tests."""
+    if df is None:
+        df = results.load()
+    test = results.played(df)
+    test = test[(test["tournament"] == "FIFA World Cup")
+                & (test["date"] >= pd.Timestamp(season_start, tz="UTC"))]
+    if test.empty:
+        return pd.DataFrame()
+
+    train = results.before(df, start)
+    ratings = elo.compute(train)
+    elo_model = EloDavidson(ratings).fit_nu(train)
+    dc = DixonColes().fit(train, ref_date=start)
+
+    p_elo, p_dc, outcomes = [], [], []
+    for _, m in test.iterrows():
+        p_elo.append(elo_model.predict(m.home_team, m.away_team, m.neutral))
+        p_dc.append(dc.predict(m.home_team, m.away_team, m.neutral))
+        outcomes.append(metrics.outcome_index(m.home_score, m.away_score))
+    p_elo, p_dc = np.array(p_elo), np.array(p_dc)
+    outcomes = np.array(outcomes)
+
+    models = {
+        "dixon_coles": p_dc,
+        "elo": p_elo,
+        "ensemble": log_pool(p_elo, p_dc, w),
+        "uniform": np.full((len(outcomes), 3), 1 / 3),
+    }
+    rows = [{
+        "model": name,
+        "w": round(w, 2) if name == "ensemble" else None,
+        "n": int(len(outcomes)),
+        "log_loss": metrics.log_loss(p, outcomes),
+        "brier": metrics.brier(p, outcomes),
+        "rps": metrics.rps(p, outcomes),
+        "accuracy": float((p.argmax(axis=1) == outcomes).mean()),
+    } for name, p in models.items()]
+    return pd.DataFrame(rows).sort_values("log_loss").reset_index(drop=True)
+
+
 def best_ensemble_weight(years=(2014, 2018, 2022), df: pd.DataFrame | None = None) -> float:
     """Peso w del log-pool que minimiza el log-loss promedio entre mundiales."""
     if df is None:

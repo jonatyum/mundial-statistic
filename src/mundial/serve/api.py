@@ -86,3 +86,11 @@ def champion():
 def calibration():
     df, updated = _load("calibration")
     return _payload("calibration", df, updated)
+
+
+@app.get("/model-comparison")
+def model_comparison():
+    """Acierto de cada modelo (Elo, Dixon-Coles, ensamble, uniforme) sobre los
+    partidos ya jugados del Mundial 2026, con entrenamiento anti-fuga."""
+    df, updated = _load("model_comparison")
+    return _payload("model_comparison", df, updated)

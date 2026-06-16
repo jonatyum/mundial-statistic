@@ -2,13 +2,14 @@
 ensamble (Elo-Davidson + Dixon-Coles condicionado)."""
 import numpy as np
 
-from mundial.models.ensemble import condition_matrix, log_pool
+from mundial.models.ensemble import blend_market, condition_matrix, log_pool
 
 
 def match_forecast(dc, elo_model, w: float, home: str, away: str,
-                   neutral: bool = True) -> dict:
+                   neutral: bool = True, market=None, market_weight: float = 0.0) -> dict:
     p = log_pool(elo_model.predict(home, away, neutral),
                  dc.predict(home, away, neutral), w)
+    p = blend_market(p, market, market_weight)  # mezcla el mercado si hay cuota
     m = condition_matrix(dc.score_matrix(home, away, neutral), p)
     g = np.arange(m.shape[0])
     xg_h = float((m.sum(axis=1) * g).sum())

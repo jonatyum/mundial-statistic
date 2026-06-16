@@ -176,6 +176,10 @@ const I18N = {
     hits:"Aciertos (modal)",
     th_match:"Partido",th_real:"Real",th_got:"Salió",th_logloss:"Log-loss",
     cal_title:"Log-loss acumulado vs baseline",cal_cum:"log-loss acumulado",cal_unif:"uniforme (1.0986)",
+    cmp_title:"¿Qué modelo/fuente acierta más?",th_model:"Modelo / fuente",th_n:"N",th_brier:"Brier",th_rps:"RPS",th_acc:"Acierto",cmp_best:"mejor",
+    cmp_caption:n=>`Modelos sobre ${n} partido${n>1?"s":""} jugado${n>1?"s":""} · entrenamiento anti-fuga (datos previos al torneo). Menor log-loss = mejores probabilidades; con pocos partidos es muy ruidoso.`,
+    cmp_market_note:"El mercado (casas de apuestas) se mide solo sobre los partidos con cuota capturada antes del inicio (ver columna N).",
+    mlabels:{dixon_coles:"Dixon-Coles",elo:"Elo-Davidson",ensemble:"Ensamble",uniform:"Uniforme (baseline)",market:"Mercado (casas)"},
     info_models:"Modelos",info_formulas:"Fórmula",info_params:"Parámetros",
     info_sources:"Fuentes de datos",info_pipeline:"Cómo se actualiza",info_optional:"opcional",
     days:["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"],
@@ -209,6 +213,10 @@ const I18N = {
     hits:"Modal hits",
     th_match:"Match",th_real:"Actual",th_got:"Predicted",th_logloss:"Log-loss",
     cal_title:"Cumulative log-loss vs baseline",cal_cum:"cumulative log-loss",cal_unif:"uniform (1.0986)",
+    cmp_title:"Which model/source is most accurate?",th_model:"Model / source",th_n:"N",th_brier:"Brier",th_rps:"RPS",th_acc:"Hit rate",cmp_best:"best",
+    cmp_caption:n=>`Models over ${n} played match${n>1?"es":""} · leak-free training (pre-tournament data only). Lower log-loss = better probabilities; very noisy with few matches.`,
+    cmp_market_note:"The market (bookmakers) is scored only on matches with odds captured before kickoff (see column N).",
+    mlabels:{dixon_coles:"Dixon-Coles",elo:"Elo-Davidson",ensemble:"Ensemble",uniform:"Uniform (baseline)",market:"Market (bookmakers)"},
     info_models:"Models",info_formulas:"Formula",info_params:"Parameters",
     info_sources:"Data sources",info_pipeline:"How it updates",info_optional:"optional",
     days:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
@@ -451,6 +459,19 @@ function renderSalud(){
   if(!c.length){p.innerHTML=`<div class="info">${t("health_wait")}</div>`;return;}
   const last=c[c.length-1];
   const hits=c.filter(r=>r.hit).length;
+  const mc=DATA.model_comparison||[];
+  const bestReal=mc.findIndex(r=>r.model!=="uniform");  // 1ª fila no-uniforme = mejor modelo real
+  const hasMkt=mc.some(r=>r.model==="market");
+  let cmpCap=mc.length?t("cmp_caption")(mc[0].n):"";
+  if(hasMkt)cmpCap+=" "+t("cmp_market_note");
+  const cmpHtml = mc.length ? `<div class="dsec" style="margin-top:24px">🏅 ${t("cmp_title")}</div>
+    <table><tr><th>${t("th_model")}</th><th>${t("th_n")}</th><th>${t("th_logloss")}</th><th>${t("th_brier")}</th><th>${t("th_rps")}</th><th>${t("th_acc")}</th></tr>`+
+    mc.map((r,i)=>{
+      const lbl=(t("mlabels")[r.model]||r.model)+(r.model==="ensemble"&&r.w!=null?` (w=${(+r.w).toFixed(2)})`:"");
+      const best=i===bestReal?` <span class="chip ok" style="padding:1px 8px">${t("cmp_best")}</span>`:"";
+      const sty=r.model==="uniform"?`color:${C.muted}`:"";
+      return `<tr style="${sty}"><td>${lbl}${best}</td><td>${r.n}</td><td>${r.log_loss.toFixed(4)}</td><td>${r.brier.toFixed(4)}</td><td>${r.rps.toFixed(4)}</td><td>${Math.round(r.accuracy*100)}%</td></tr>`;
+    }).join("")+`</table><div class="mlegend" style="margin-top:7px">${cmpCap}</div>` : "";
   p.innerHTML=`<div class="tiles">
       <div class="tile"><div class="l">${t("evaluated")}</div><div class="v">${c.length}</div></div>
       <div class="tile"><div class="l">${t("logloss_cum")}</div><div class="v ok">${last.log_loss_acum.toFixed(4)}</div><div class="d">${t("vs_uniform")}</div></div>
@@ -460,7 +481,7 @@ function renderSalud(){
     <table><tr><th>${t("th_match")}</th><th>${t("th_real")}</th><th>${t("th_got")}</th><th>${t("th_logloss")}</th></tr>`+
     c.map(r=>`<tr><td>${flag(r.home)} – ${flag(r.away)}</td><td>${r.result}</td>
       <td style="color:${r.hit?C.home:C.muted}">${r.outcome}${r.hit?" ✓":""}</td>
-      <td style="color:${r.hit?C.home:C.danger}">${r.log_loss.toFixed(3)}</td></tr>`).join("")+`</table>`;
+      <td style="color:${r.hit?C.home:C.danger}">${r.log_loss.toFixed(3)}</td></tr>`).join("")+`</table>`+cmpHtml;
   if(calibChart)calibChart.destroy();
   calibChart=new Chart(document.getElementById("calibCanvas"),{type:"line",
     data:{labels:c.map((_,i)=>i+1),datasets:[
@@ -484,6 +505,7 @@ function renderInfo(){
     </div>`;}).join("");
   const sources=(mi.sources||[]).map(s=>`<div class="src">
       <a href="${s.url}" target="_blank" rel="noopener">${s.name}${s.optional?` · ${t("info_optional")}`:""}</a>
+      ${s.role?`<span class="tag" style="margin:3px 0 0">${localize(s.role)}</span>`:""}
       <span class="u">${s.url}</span>
       <span>${localize(s.use)}</span>
     </div>`).join("");

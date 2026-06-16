@@ -67,6 +67,11 @@ TR = {
         "evaluated": "Partidos evaluados", "logloss_cum": "Log-loss acumulado", "vs_uniform": "vs uniforme",
         "hits": "Aciertos (resultado modal)", "cal_title": "Log-loss acumulado vs baseline uniforme",
         "cal_xlabel": "partido nº", "cal_ylabel": "log-loss",
+        "cmp_title": "¿Qué modelo/fuente acierta más?", "th_model": "Modelo / fuente", "th_logloss2": "Log-loss",
+        "th_n": "N", "th_brier": "Brier", "th_rps": "RPS", "th_acc": "Acierto",
+        "cmp_caption": "Modelos sobre {n} partidos jugados · entrenamiento anti-fuga (datos previos al torneo). Menor log-loss = mejores probabilidades; muy ruidoso con pocos partidos.",
+        "cmp_market_note": "El mercado (casas de apuestas) se mide solo sobre los partidos con cuota capturada antes del inicio (ver columna N).",
+        "mlabels": {"dixon_coles": "Dixon-Coles", "elo": "Elo-Davidson", "ensemble": "Ensamble", "uniform": "Uniforme (baseline)", "market": "Mercado (casas)"},
         "footer": "Predicciones congeladas al inicio de cada partido · prediction log público · ensamble Elo-Davidson + Dixon-Coles · 100k simulaciones Monte Carlo",
         "info_intro": "Resumen", "info_models": "Modelos", "info_formula": "Fórmula", "info_params": "Parámetros",
         "info_sources": "Fuentes de datos", "info_pipeline": "Cómo se actualiza", "info_optional": "opcional",
@@ -101,6 +106,11 @@ TR = {
         "evaluated": "Matches evaluated", "logloss_cum": "Cumulative log-loss", "vs_uniform": "vs uniform",
         "hits": "Modal-result hits", "cal_title": "Cumulative log-loss vs uniform baseline",
         "cal_xlabel": "match no.", "cal_ylabel": "log-loss",
+        "cmp_title": "Which model/source is most accurate?", "th_model": "Model / source", "th_logloss2": "Log-loss",
+        "th_n": "N", "th_brier": "Brier", "th_rps": "RPS", "th_acc": "Hit rate",
+        "cmp_caption": "Models over {n} played matches · leak-free training (pre-tournament data only). Lower log-loss = better probabilities; very noisy with few matches.",
+        "cmp_market_note": "The market (bookmakers) is scored only on matches with odds captured before kickoff (see column N).",
+        "mlabels": {"dixon_coles": "Dixon-Coles", "elo": "Elo-Davidson", "ensemble": "Ensemble", "uniform": "Uniform (baseline)", "market": "Market (bookmakers)"},
         "footer": "Predictions frozen at kickoff · public prediction log · Elo-Davidson + Dixon-Coles ensemble · 100k Monte Carlo simulations",
         "info_intro": "Summary", "info_models": "Models", "info_formula": "Formula", "info_params": "Parameters",
         "info_sources": "Data sources", "info_pipeline": "How it updates", "info_optional": "optional",
@@ -524,6 +534,31 @@ with tab_health:
         show["away"] = show["away"].map(team)
         st.dataframe(show, width="stretch", hide_index=True)
 
+        mc, _ = load("model_comparison")
+        if mc is not None and len(mc):
+            st.markdown(f"#### 🏅 {T('cmp_title')}")
+            real = mc[mc["model"] != "uniform"]
+            best_id = real.iloc[0]["model"] if len(real) else None
+
+            def _mlabel(row):
+                name = T("mlabels").get(row["model"], row["model"])
+                if row["model"] == "ensemble" and pd.notna(row.get("w")):
+                    name += f" (w={row['w']:.2f})"
+                return name + (" ⭐" if row["model"] == best_id else "")
+
+            disp = mc.copy()
+            disp[T("th_model")] = disp.apply(_mlabel, axis=1)
+            cmp_show = disp[[T("th_model"), "n", "log_loss", "brier", "rps", "accuracy"]].copy()
+            cmp_show.columns = [T("th_model"), T("th_n"), T("th_logloss2"), T("th_brier"),
+                                T("th_rps"), T("th_acc")]
+            st.dataframe(cmp_show, width="stretch", hide_index=True,
+                         column_config={T("th_acc"): st.column_config.ProgressColumn(
+                             T("th_acc"), format="percent", min_value=0, max_value=1)})
+            caption = T("cmp_caption").format(n=int(mc.iloc[0]["n"]))
+            if (mc["model"] == "market").any():
+                caption += " " + T("cmp_market_note")
+            st.caption(caption)
+
 with tab_info:
     mi = model_info()
     if mi.get("intro"):
@@ -540,7 +575,9 @@ with tab_info:
     st.subheader(f"🛰️ {T('info_sources')}")
     for s in mi.get("sources", []):
         opt = f" · {T('info_optional')}" if s.get("optional") else ""
-        st.markdown(f"**[{s['name']}]({s['url']})**{opt}  \n{localize(s.get('use'))}")
+        role = localize(s.get("role"))
+        role_md = f"*{role}*  \n" if role else ""
+        st.markdown(f"**[{s['name']}]({s['url']})**{opt}  \n{role_md}{localize(s.get('use'))}")
     st.subheader(f"🔄 {T('info_pipeline')}")
     st.markdown(localize(mi.get("pipeline")))
 

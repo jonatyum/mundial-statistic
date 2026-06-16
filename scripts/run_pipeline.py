@@ -15,7 +15,7 @@ from mundial.config import ROOT, model_info, settings, team_es, tournament
 from mundial.evaluate import backtest
 from mundial.features import elo
 from mundial.forecast import match_forecast
-from mundial.ingest import results
+from mundial.ingest import odds, results
 from mundial.models.dixon_coles import DixonColes
 from mundial.models.elo_model import EloDavidson
 from mundial.simulate.tournament import TournamentSimulator
@@ -72,9 +72,23 @@ def main():
     team_group = {t: g for g, teams in tournament()["groups"].items() for t in teams}
     kickoffs = yaml.safe_load(
         (ROOT / "config" / "kickoff_times.yaml").read_text())["kickoffs_utc"]
+
+    # cuotas frescas para mezclar el mercado en el ensamble (requiere ODDS_API_KEY)
+    try:
+        odds.fetch()
+    except Exception as e:
+        print(f"      cuotas no capturadas ({e})")
+    market_probs = odds.latest_market_probs()
+    mkt_w = float(settings()["odds"].get("market_weight", 0.0)) if market_probs else 0.0
+    n_mkt = sum((m.home_team, m.away_team) in market_probs for _, m in wc.iterrows())
+    if market_probs:
+        print(f"      mercado integrado en {n_mkt}/{len(wc)} partidos (peso {mkt_w})")
+
     rows = []
     for _, m in wc.iterrows():
-        fc = match_forecast(dc, elo_model, w, m.home_team, m.away_team, bool(m.neutral))
+        fc = match_forecast(dc, elo_model, w, m.home_team, m.away_team, bool(m.neutral),
+                            market=market_probs.get((m.home_team, m.away_team)),
+                            market_weight=mkt_w)
         played = pd.notna(m.home_score)
         key = "|".join(sorted([m.home_team, m.away_team]))
         rows.append({
@@ -137,6 +151,23 @@ def main():
     if len(calib):
         print(f"      calibración: {len(calib)} partidos | "
               f"log-loss acum {calib['log_loss_acum'].iloc[-1]:.4f} (uniforme 1.0986)")
+
+    # comparación por-modelo (anti-fuga) sobre los partidos ya jugados;
+    # se agrega el mercado (casas) como fuente extra si hay cuotas pre-partido
+    cmp = backtest.live_model_comparison(df, w=w)
+    try:
+        mrow = odds.market_accuracy(df)
+        if mrow:
+            cmp = pd.concat([cmp, pd.DataFrame([mrow])], ignore_index=True)
+            cmp = cmp.sort_values("log_loss").reset_index(drop=True)
+            print(f"      +mercado en la comparación ({mrow['n']} partidos con cuota previa)")
+    except Exception as e:
+        print(f"      mercado no evaluado ({e})")
+    cmp.round(4).to_csv(proc / "model_comparison.csv", index=False)
+    if len(cmp):
+        best = cmp.iloc[0]
+        print(f"      comparación modelos: mejor='{best['model']}' "
+              f"(log-loss {best['log_loss']:.4f} sobre {int(best['n'])} partidos)")
 
     # snapshot fechado del estado completo (sección 9.5 del plan)
     snap = ROOT / settings()["paths"]["snapshots"] / str(now.date())

@@ -31,3 +31,8 @@ simulation:
   n_sims: 100000
   extra_time_factor: 0.31   # lambda de prórroga ≈ (30/90) * factor conservador
   penalty_base: 0.5         # P(ganar penales) base, ajustada por Elo
+
+odds:
+  # Peso del mercado al mezclarlo en el ensamble cuando hay cuota (requiere ODDS_API_KEY).
+  # 0 = solo modelo; 0.5 = mitad modelo / mitad mercado (log-pool geométrico).
+  market_weight: 0.5

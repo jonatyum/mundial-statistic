@@ -90,31 +90,52 @@ models:
 sources:
   - name: martj42/international_results
     url: https://github.com/martj42/international_results
+    role: {es: "Insumo — entrena los modelos", en: "Input — trains the models"}
     use:
       es: >-
-        Histórico completo de resultados internacionales (1872+) y el calendario real
-        del Mundial 2026. Es el dataset de Kaggle "International football results",
-        leído desde su mirror en GitHub (sin API key).
+        Insumo principal: no predice, alimenta al modelo. Histórico completo de
+        resultados internacionales (1872→hoy) y el calendario real del Mundial 2026
+        (con marcadores vacíos hasta que se juegan). Es el dataset de Kaggle
+        "International football results", leído como CSV crudo desde su mirror en
+        GitHub (sin API key) y cacheado en data/raw/. Con él se calculan el Elo y se
+        ajusta el Dixon-Coles.
       en: >-
-        Full history of international results (1872+) and the real 2026 World Cup
-        fixture list. It is the Kaggle "International football results" dataset, read
-        from its GitHub mirror (no API key).
+        Main input: it doesn't predict, it feeds the model. Full history of
+        international results (1872→today) and the real 2026 World Cup fixtures (scores
+        blank until played). It is the Kaggle "International football results" dataset,
+        read as a raw CSV from its GitHub mirror (no API key) and cached in data/raw/.
+        It is what Elo is computed from and Dixon-Coles is fitted on.
   - name: ESPN Scoreboard API
     url: https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard
+    role: {es: "Insumo — marcadores/resultados", en: "Input — scores/results"}
     use:
       es: >-
-        Marcadores en vivo y resultados finales, leídos desde el navegador cada 60 s.
-        Solo para mostrar el marcador: no alimenta el modelo hasta que el partido
-        termina.
+        Insumo de marcadores en vivo y resultados finales (no predice). El sitio lo
+        consulta directo desde el navegador cada 60 s; en el servidor el pipeline lo
+        usa para completar los finales que el histórico todavía no publicó, así la
+        calibración no espera. Sin API key; cachea los días ya cerrados.
       en: >-
-        Live scores and final results, fetched from the browser every 60 s. Display
-        only: it does not feed the model until the match is over.
+        Input for live scores and final results (it doesn't predict). The site queries
+        it directly from the browser every 60 s; server-side the pipeline uses it to
+        fill finals not yet published in the history dataset, so calibration doesn't
+        wait. No API key; closed days are cached.
   - name: the-odds-api.com
     url: https://the-odds-api.com
     optional: true
+    role: {es: "Benchmark — predice (mercado)", en: "Benchmark — predicts (market)"}
     use:
-      es: "Cuotas de casas de apuestas para comparar (opcional, requiere API key)."
-      en: "Bookmaker odds for comparison (optional, requires an API key)."
+      es: >-
+        Mercado de apuestas como benchmark de predicción: esta sí produce
+        probabilidades comparables al modelo. Promedia las cuotas 1X2 entre casas y les
+        quita el margen. Opcional: requiere ODDS_API_KEY; sin ella se omite. Su acierto
+        se mide solo sobre partidos cuya cuota se capturó antes del inicio (no se puede
+        backfillear el pasado en el plan gratuito).
+      en: >-
+        Betting market as a prediction benchmark: this one does produce probabilities
+        comparable to the model. It averages 1X2 odds across bookmakers and removes the
+        margin. Optional: needs ODDS_API_KEY; skipped without it. Its accuracy is
+        measured only on matches whose odds were captured before kickoff (the past
+        can't be backfilled on the free plan).
 
 pipeline:
   es: >-
