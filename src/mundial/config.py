@@ -17,9 +17,30 @@ def tournament() -> dict:
 
 
 @lru_cache
+def _teams() -> dict:
+    return yaml.safe_load((ROOT / "config" / "teams.yaml").read_text())
+
+
 def team_aliases() -> dict:
-    return yaml.safe_load((ROOT / "config" / "teams.yaml").read_text())["aliases"]
+    return _teams()["aliases"]
+
+
+@lru_cache
+def team_names_es() -> dict:
+    """Canónico (inglés) -> nombre para mostrar en español."""
+    return _teams().get("names_es", {})
+
+
+@lru_cache
+def model_info() -> dict:
+    """Modelos, fórmulas y fuentes (config/model_info.yaml). Bilingüe."""
+    return yaml.safe_load((ROOT / "config" / "model_info.yaml").read_text())
 
 
 def canonical(name: str) -> str:
     return team_aliases().get(name, name)
+
+
+def team_es(name: str) -> str:
+    """Nombre en español si existe, si no el canónico."""
+    return team_names_es().get(name, name)

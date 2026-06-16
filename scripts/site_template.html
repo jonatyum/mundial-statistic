@@ -17,6 +17,23 @@
   .logo{font-size:18px;font-weight:800;letter-spacing:-.01em}
   .fresh{margin-left:auto;font-size:12px;color:var(--muted)}
   .fresh::before{content:"●";color:var(--home);margin-right:6px}
+  .langtog{display:flex;gap:2px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--s2)}
+  .langtog button{background:none;border:none;color:var(--muted);font:700 12px system-ui;
+    padding:6px 11px;cursor:pointer}
+  .langtog button.active{background:var(--away);color:#fff}
+  .infobox{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+  .infobox h3{margin:0 0 4px;font-size:16px}
+  .infobox .tag{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px}
+  .infobox .formula{background:var(--s2);border:1px solid var(--border);border-radius:8px;
+    padding:9px 12px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--gold);
+    overflow-x:auto;margin:8px 0}
+  .infobox ul{margin:8px 0 0;padding-left:18px;color:var(--muted)}
+  .infobox ul li{margin:2px 0}
+  .infobox p{margin:6px 0;color:var(--text)}
+  .src{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-bottom:1px solid var(--s2)}
+  .src:last-child{border:none}
+  .src a{color:var(--away);font-weight:600;word-break:break-all}
+  .src .u{color:var(--muted);font-size:13px}
   nav{display:flex;gap:4px;flex-wrap:wrap;padding:10px 24px;background:var(--surface);
     border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
   nav button{background:none;border:none;color:var(--muted);font:600 13px system-ui;
@@ -101,15 +118,19 @@
 <body>
 <div class="strip"></div>
 <header>
-  <span class="logo">⚽ Mundial 2026 — Predicciones</span>
+  <span class="logo">⚽ <span id="logoText"></span></span>
   <span class="fresh" id="fresh"></span>
+  <span class="langtog" id="langtog">
+    <button data-lang="es">ES</button><button data-lang="en">EN</button>
+  </span>
 </header>
 <nav id="nav">
-  <button data-tab="partidos" class="active">⚽ Partidos</button>
-  <button data-tab="grupos">📊 Grupos</button>
-  <button data-tab="eliminatorias">🏆 Eliminatorias</button>
-  <button data-tab="titulo">🥇 Carrera al título</button>
-  <button data-tab="salud">📈 Salud del modelo</button>
+  <button data-tab="partidos" data-emoji="⚽" data-i18n="tab_matches" class="active"></button>
+  <button data-tab="grupos" data-emoji="📊" data-i18n="tab_groups"></button>
+  <button data-tab="eliminatorias" data-emoji="🏆" data-i18n="tab_ko"></button>
+  <button data-tab="titulo" data-emoji="🥇" data-i18n="tab_title"></button>
+  <button data-tab="salud" data-emoji="📈" data-i18n="tab_health"></button>
+  <button data-tab="info" data-emoji="ℹ️" data-i18n="tab_info"></button>
 </nav>
 <main>
   <section class="panel active" id="panel-partidos"></section>
@@ -117,26 +138,110 @@
   <section class="panel" id="panel-eliminatorias"></section>
   <section class="panel" id="panel-titulo"></section>
   <section class="panel" id="panel-salud"></section>
+  <section class="panel" id="panel-info"></section>
 </main>
-<footer>
-  Predicciones congeladas al inicio de cada partido · ensamble Elo-Davidson + Dixon-Coles ·
-  100k simulaciones Monte Carlo · marcadores en vivo de ESPN
-</footer>
+<footer id="footer"></footer>
 
 <script>
 const DATA = /*__DATA__*/;
 const C = {home:"#22c55e",draw:"#64748b",away:"#3b82f6",gold:"#eab308",danger:"#ef4444",
            s2:"#1e2433",border:"#2a3242",text:"#e6edf3",muted:"#8b949e"};
-const flag = t => (DATA.flags[t] ? DATA.flags[t]+" " : "") + t;
-const canon = t => DATA.aliases[t] || t;
+
+// ---- i18n ----
+const I18N = {
+  es:{
+    title:"Mundial 2026 — Predicciones",
+    tab_matches:"Partidos",tab_groups:"Grupos",tab_ko:"Eliminatorias",
+    tab_title:"Carrera al título",tab_health:"Salud del modelo",tab_info:"Información",
+    updated:"Actualizado",model:"modelo",
+    footer:"Predicciones congeladas al inicio de cada partido · ensamble Elo-Davidson + Dixon-Coles · 100k simulaciones Monte Carlo · marcadores en vivo de ESPN",
+    group:"Grupo",vs:"vs",xg:"goles esperados",draw:"empate",
+    over25_chip:"+2.5 goles",btts_chip:"ambos anotan",
+    live:"EN VIVO",final:"FINAL",inplay:"en juego",finalresult:"resultado final",
+    seedetail:"Ver detalle del partido",
+    comparison:"Comparativa",attack:"Ataque",defense:"Solidez def.",xg_short:"Goles esp.",
+    markets:"Mercados",win:"Gana",draw_cap:"Empate",over25:"Más de 2.5 goles",
+    under25:"Menos de 2.5 goles",btts_cap:"Ambos anotan",likely:"Marcadores más probables",
+    all_m:"Todos",all_f:"Todas",st_pending:"pendiente",st_live:"en vivo",st_played:"jugado",
+    nofilter:"No hay partidos con esos filtros.",
+    matches_n:n=>`${n} partido${n>1?"s":""}`,
+    livebanner:n=>`🔴 ${n} partido(s) en juego — se actualiza cada 60 s`,
+    th_team:"Equipo",th_exp_pts:"Pts esp.",th_gf:"GF",th_gd:"DG",
+    th_1st:"P(1º)",th_2nd:"P(2º)",th_3rd:"P(3º clasif.)",th_advance:"P(avanza)",
+    ko_match:"Partido",ko_pairing:"P(cruce)",ko_advances:"Avanza",
+    no_history:"Sin historial todavía.",pchamp_now:"P(campeón) actual",
+    pchamp_byday:"P(campeón) jornada a jornada",
+    health_wait:"⏳ Aún no hay partidos terminados: la calibración en vivo aparecerá tras la primera jornada.",
+    evaluated:"Partidos evaluados",logloss_cum:"Log-loss acumulado",vs_uniform:"vs 1.0986 uniforme",
+    hits:"Aciertos (modal)",
+    th_match:"Partido",th_real:"Real",th_got:"Salió",th_logloss:"Log-loss",
+    cal_title:"Log-loss acumulado vs baseline",cal_cum:"log-loss acumulado",cal_unif:"uniforme (1.0986)",
+    info_models:"Modelos",info_formulas:"Fórmula",info_params:"Parámetros",
+    info_sources:"Fuentes de datos",info_pipeline:"Cómo se actualiza",info_optional:"opcional",
+    days:["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"],
+    months:["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],
+    rounds:{"R32":"R32","Octavos":"Octavos","Cuartos":"Cuartos","Semifinal":"Semifinal","Final":"Final"},
+  },
+  en:{
+    title:"World Cup 2026 — Predictions",
+    tab_matches:"Matches",tab_groups:"Groups",tab_ko:"Knockouts",
+    tab_title:"Title race",tab_health:"Model health",tab_info:"Info",
+    updated:"Updated",model:"model",
+    footer:"Predictions frozen at kickoff · Elo-Davidson + Dixon-Coles ensemble · 100k Monte Carlo simulations · live scores from ESPN",
+    group:"Group",vs:"vs",xg:"expected goals",draw:"draw",
+    over25_chip:"over 2.5",btts_chip:"both score",
+    live:"LIVE",final:"FINAL",inplay:"in play",finalresult:"final score",
+    seedetail:"See match detail",
+    comparison:"Comparison",attack:"Attack",defense:"Defence",xg_short:"xG",
+    markets:"Markets",win:"Win",draw_cap:"Draw",over25:"Over 2.5 goals",
+    under25:"Under 2.5 goals",btts_cap:"Both teams score",likely:"Most likely scores",
+    all_m:"All",all_f:"All",st_pending:"pending",st_live:"live",st_played:"played",
+    nofilter:"No matches for those filters.",
+    matches_n:n=>`${n} match${n>1?"es":""}`,
+    livebanner:n=>`🔴 ${n} match(es) in play — refreshes every 60 s`,
+    th_team:"Team",th_exp_pts:"Exp. pts",th_gf:"GF",th_gd:"GD",
+    th_1st:"P(1st)",th_2nd:"P(2nd)",th_3rd:"P(3rd qual.)",th_advance:"P(advance)",
+    ko_match:"Match",ko_pairing:"P(pairing)",ko_advances:"Advances",
+    no_history:"No history yet.",pchamp_now:"P(champion) now",
+    pchamp_byday:"P(champion) matchday by matchday",
+    health_wait:"⏳ No finished matches yet: live calibration will appear after the first matchday.",
+    evaluated:"Matches evaluated",logloss_cum:"Cumulative log-loss",vs_uniform:"vs 1.0986 uniform",
+    hits:"Modal hits",
+    th_match:"Match",th_real:"Actual",th_got:"Predicted",th_logloss:"Log-loss",
+    cal_title:"Cumulative log-loss vs baseline",cal_cum:"cumulative log-loss",cal_unif:"uniform (1.0986)",
+    info_models:"Models",info_formulas:"Formula",info_params:"Parameters",
+    info_sources:"Data sources",info_pipeline:"How it updates",info_optional:"optional",
+    days:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+    months:["January","February","March","April","May","June","July","August","September","October","November","December"],
+    rounds:{"R32":"R32","Octavos":"Round of 16","Cuartos":"Quarter-finals","Semifinal":"Semi-finals","Final":"Final"},
+  },
+};
+let LANG = localStorage.getItem("mundial_lang") || "es";
+const t = k => { const v = (I18N[LANG]||I18N.es)[k]; return v===undefined ? ((I18N.es[k])??k) : v; };
+const localize = o => o==null ? "" : (typeof o==="object" ? (o[LANG]??o.es??o.en??"") : o);
+const NAMES_ES = DATA.names_es || {};
+const teamName = c => LANG==="es" ? (NAMES_ES[c]||c) : c;
+
+const flag = c => (DATA.flags[c] ? DATA.flags[c]+" " : "") + teamName(c);
+const canon = c => DATA.aliases[c] || c;
 const key = (a,b) => [canon(a),canon(b)].sort().join("|");
 const pct = x => (x==null?"—":Math.round(x*100)+"%");
-const DIAS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
-const MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
-function fechaLinda(iso){const d=new Date(iso+"T12:00:00");return `${DIAS[d.getDay()]} ${d.getDate()} de ${MESES[d.getMonth()]}`;}
+function fechaLinda(iso){const d=new Date(iso+"T12:00:00");
+  return LANG==="es" ? `${t("days")[d.getDay()]} ${d.getDate()} de ${t("months")[d.getMonth()]}`
+                     : `${t("days")[d.getDay()]} ${t("months")[d.getMonth()]} ${d.getDate()}`;}
 function horaLocal(k){if(!k)return"";const d=new Date(k);return d.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});}
 
-document.getElementById("fresh").textContent = `Actualizado ${DATA.generated} · modelo ${DATA.version}`;
+function applyChrome(){
+  document.documentElement.lang = LANG;
+  document.title = t("title");
+  document.getElementById("logoText").textContent = t("title");
+  document.getElementById("fresh").textContent = `${t("updated")} ${DATA.generated} · ${t("model")} ${DATA.version}`;
+  document.getElementById("footer").textContent = t("footer");
+  document.querySelectorAll("#nav button").forEach(b=>{
+    b.textContent = `${b.dataset.emoji} ${t(b.dataset.i18n)}`;});
+  document.querySelectorAll("#langtog button").forEach(b=>
+    b.classList.toggle("active", b.dataset.lang===LANG));
+}
 
 // ---- marcadores en vivo (ESPN, client-side) ----
 let LIVE = {};
@@ -171,29 +276,29 @@ function matchCard(m){
   let hs,as_;
   if(lv){ if(lv.home===m.home){hs=lv.hs;as_=lv.as;} else {hs=lv.as;as_=lv.hs;} }
   if(lv && lv.state==="in"){
-    badge=`<span class="chip live">🔴 EN VIVO · ${lv.detail}</span>`;
-    result=`<div class="result">${hs} – ${as_}<small>en juego</small></div>`;
+    badge=`<span class="chip live">🔴 ${t("live")} · ${lv.detail}</span>`;
+    result=`<div class="result">${hs} – ${as_}<small>${t("inplay")}</small></div>`;
   }else if((lv&&lv.state==="post")||m.status==="jugado"){
-    badge=`<span class="chip ok">✅ FINAL</span>`;
+    badge=`<span class="chip ok">✅ ${t("final")}</span>`;
     const r = lv ? `${hs} – ${as_}` : (m.result||"").replace("-"," – ");
-    result=`<div class="result">${r}<small>resultado final</small></div>`;
+    result=`<div class="result">${r}<small>${t("finalresult")}</small></div>`;
   }
   const chips=`<span class="chip hot">${m.score_1} · ${pct(m.p_score_1)}</span>`+
     `<span class="chip">${m.score_2} · ${pct(m.p_score_2)}</span>`+
     `<span class="chip">${m.score_3} · ${pct(m.p_score_3)}</span>`+
-    `<span class="chip">+2.5 goles · ${pct(m["p_over_2.5"])}</span>`+
-    `<span class="chip">ambos anotan · ${pct(m.p_btts)}</span>`;
+    `<span class="chip">${t("over25_chip")} · ${pct(m["p_over_2.5"])}</span>`+
+    `<span class="chip">${t("btts_chip")} · ${pct(m.p_btts)}</span>`;
   return `<div class="mcard">
-    <div class="mlabel"><span>Grupo ${m.group}${relojTxt}</span><span>${badge}</span></div>
-    <div class="mteams"><span class="mteam">${flag(m.home)}</span><span class="mvs">vs</span><span class="mteam">${flag(m.away)}</span></div>
+    <div class="mlabel"><span>${t("group")} ${m.group}${relojTxt}</span><span>${badge}</span></div>
+    <div class="mteams"><span class="mteam">${flag(m.home)}</span><span class="mvs">${t("vs")}</span><span class="mteam">${flag(m.away)}</span></div>
     ${result}
-    <div class="mxg">goles esperados <b>${m.xg_home.toFixed(2)} – ${m.xg_away.toFixed(2)}</b></div>
+    <div class="mxg">${t("xg")} <b>${m.xg_home.toFixed(2)} – ${m.xg_away.toFixed(2)}</b></div>
     <div class="mbar"><div style="background:${C.home};width:${m.p_home*100}%">${pct(m.p_home)}</div>
       <div style="background:${C.draw};width:${m.p_draw*100}%">${pct(m.p_draw)}</div>
       <div style="background:${C.away};width:${m.p_away*100}%">${pct(m.p_away)}</div></div>
-    <div class="mlegend"><b>${m.home}</b><span>empate</span><b>${m.away}</b></div>
+    <div class="mlegend"><b>${teamName(m.home)}</b><span>${t("draw")}</span><b>${teamName(m.away)}</b></div>
     <div class="chips">${chips}</div>
-    <details class="din"><summary>Ver detalle del partido</summary><div class="dbody">${matchDetail(m)}</div></details>
+    <details class="din"><summary>${t("seedetail")}</summary><div class="dbody">${matchDetail(m)}</div></details>
   </div>`;
 }
 function cmpRow(label,l,r,lshare,dec=0){
@@ -207,22 +312,22 @@ function matchDetail(m){
   const eloShare=1/(1+Math.pow(10,(m.elo_away-m.elo_home)/400));
   const atk=m.attack_home/(m.attack_home+m.attack_away||1);
   const def=(1/m.defense_home)/((1/m.defense_home)+(1/m.defense_away)||1);
-  const cmp=`<div class="dsec">Comparativa</div>`+
+  const cmp=`<div class="dsec">${t("comparison")}</div>`+
     cmpRow("Elo",m.elo_home,m.elo_away,eloShare)+
-    cmpRow("Ataque",m.attack_home,m.attack_away,atk,2)+
-    cmpRow("Solidez def.",m.defense_home,m.defense_away,def,2)+
-    cmpRow("Goles esp.",m.xg_home,m.xg_away,m.xg_home/(m.xg_home+m.xg_away),2);
-  const mkt=`<div class="dsec">Mercados</div>`+
-    `<div class="mkt"><span>Gana ${m.home}</span><b>${pct(m.p_home)}</b></div>`+
-    `<div class="mkt"><span>Empate</span><b>${pct(m.p_draw)}</b></div>`+
-    `<div class="mkt"><span>Gana ${m.away}</span><b>${pct(m.p_away)}</b></div>`+
-    `<div class="mkt"><span>Más de 2.5 goles</span><b>${pct(m["p_over_2.5"])}</b></div>`+
-    `<div class="mkt"><span>Menos de 2.5 goles</span><b>${pct(m["p_under_2.5"])}</b></div>`+
-    `<div class="mkt"><span>Ambos anotan</span><b>${pct(m.p_btts)}</b></div>`;
+    cmpRow(t("attack"),m.attack_home,m.attack_away,atk,2)+
+    cmpRow(t("defense"),m.defense_home,m.defense_away,def,2)+
+    cmpRow(t("xg_short"),m.xg_home,m.xg_away,m.xg_home/(m.xg_home+m.xg_away),2);
+  const mkt=`<div class="dsec">${t("markets")}</div>`+
+    `<div class="mkt"><span>${t("win")} ${teamName(m.home)}</span><b>${pct(m.p_home)}</b></div>`+
+    `<div class="mkt"><span>${t("draw_cap")}</span><b>${pct(m.p_draw)}</b></div>`+
+    `<div class="mkt"><span>${t("win")} ${teamName(m.away)}</span><b>${pct(m.p_away)}</b></div>`+
+    `<div class="mkt"><span>${t("over25")}</span><b>${pct(m["p_over_2.5"])}</b></div>`+
+    `<div class="mkt"><span>${t("under25")}</span><b>${pct(m["p_under_2.5"])}</b></div>`+
+    `<div class="mkt"><span>${t("btts_cap")}</span><b>${pct(m.p_btts)}</b></div>`;
   const pmax=Math.max(m.p_score_1,m.p_score_2,m.p_score_3)||1;
   let rows="";[1,2,3].forEach(k=>{rows+=`<div class="slrow"><span class="sn">${m["score_"+k]}</span>
     <span class="sb"><i style="width:${m["p_score_"+k]/pmax*100}%"></i></span><span class="sp">${pct(m["p_score_"+k])}</span></div>`;});
-  return cmp+mkt+`<div class="dsec">Marcadores más probables</div><div class="slist">${rows}</div>`;
+  return cmp+mkt+`<div class="dsec">${t("likely")}</div><div class="slist">${rows}</div>`;
 }
 
 // ---- pestaña Partidos ----
@@ -231,14 +336,19 @@ function renderPartidos(){
   const groups=[...new Set(DATA.matches.map(m=>m.group))].sort();
   const dates=[...new Set(DATA.matches.map(m=>m.date))].sort();
   const hoy=new Date().toISOString().slice(0,10);
-  const st=window._f||(window._f={g:"Todos",s:"Todos",d:dates.includes(hoy)?hoy:"Todas"});
+  const st=window._f||(window._f={g:"all",s:"all",d:dates.includes(hoy)?hoy:"all"});
   const enVivo=Object.values(LIVE).filter(v=>v.state==="in").length;
-  const opt=(arr,sel)=>arr.map(v=>`<option ${v===sel?"selected":""}>${v}</option>`).join("");
+  const optG=`<option value="all"${st.g==="all"?" selected":""}>${t("all_m")}</option>`+
+    groups.map(g=>`<option value="${g}"${g===st.g?" selected":""}>${t("group")} ${g}</option>`).join("");
+  const stOpts=[["all",t("all_m")],["pending",t("st_pending")],["live",t("st_live")],["played",t("st_played")]];
+  const optS=stOpts.map(([v,l])=>`<option value="${v}"${v===st.s?" selected":""}>${l}</option>`).join("");
+  const optD=`<option value="all"${st.d==="all"?" selected":""}>${t("all_f")}</option>`+
+    dates.map(d=>`<option value="${d}"${d===st.d?" selected":""}>${fechaLinda(d)}</option>`).join("");
   p.innerHTML=`<div class="filters">
-      <select id="fg"><option>Todos</option>${opt(groups,st.g)}</select>
-      <select id="fs">${opt(["Todos","pendiente","en vivo","jugado"],st.s)}</select>
-      <select id="fd"><option>Todas</option>${opt(dates,st.d)}</select>
-    </div>${enVivo?`<div style="margin-bottom:12px"><span class="chip live">🔴 ${enVivo} partido(s) en juego — se actualiza cada 60 s</span></div>`:""}
+      <select id="fg">${optG}</select>
+      <select id="fs">${optS}</select>
+      <select id="fd">${optD}</select>
+    </div>${enVivo?`<div style="margin-bottom:12px"><span class="chip live">${t("livebanner")(enVivo)}</span></div>`:""}
     <div id="mlist"></div>`;
   p.querySelector("#fg").onchange=e=>{st.g=e.target.value;drawList();};
   p.querySelector("#fs").onchange=e=>{st.s=e.target.value;drawList();};
@@ -248,17 +358,17 @@ function renderPartidos(){
 function drawList(){
   const st=window._f, box=document.getElementById("mlist"); if(!box)return;
   let v=DATA.matches.slice();
-  if(st.g!=="Todos")v=v.filter(m=>m.group===st.g);
-  if(st.d!=="Todas")v=v.filter(m=>m.date===st.d);
-  if(st.s==="en vivo")v=v.filter(m=>{const l=liveFor(m);return l&&l.state==="in";});
-  else if(st.s==="jugado")v=v.filter(m=>{const l=liveFor(m);return (l&&l.state==="post")||m.status==="jugado";});
-  else if(st.s==="pendiente")v=v.filter(m=>{const l=liveFor(m);return (!l||l.state==="pre")&&m.status!=="jugado";});
+  if(st.g!=="all")v=v.filter(m=>m.group===st.g);
+  if(st.d!=="all")v=v.filter(m=>m.date===st.d);
+  if(st.s==="live")v=v.filter(m=>{const l=liveFor(m);return l&&l.state==="in";});
+  else if(st.s==="played")v=v.filter(m=>{const l=liveFor(m);return (l&&l.state==="post")||m.status==="jugado";});
+  else if(st.s==="pending")v=v.filter(m=>{const l=liveFor(m);return (!l||l.state==="pre")&&m.status!=="jugado";});
   v.sort((a,b)=>(a.date+a.kickoff_utc).localeCompare(b.date+b.kickoff_utc));
-  if(!v.length){box.innerHTML=`<div class="info">No hay partidos con esos filtros.</div>`;return;}
+  if(!v.length){box.innerHTML=`<div class="info">${t("nofilter")}</div>`;return;}
   let h="";const byDay={};v.forEach(m=>{(byDay[m.date]=byDay[m.date]||[]).push(m);});
   Object.keys(byDay).sort().forEach(day=>{
     const arr=byDay[day];
-    h+=`<div class="datehdr">📅 ${fechaLinda(day)} <small>${arr.length} partido${arr.length>1?"s":""}</small></div>`;
+    h+=`<div class="datehdr">📅 ${fechaLinda(day)} <small>${t("matches_n")(arr.length)}</small></div>`;
     h+=`<div class="grid">${arr.map(matchCard).join("")}</div>`;
   });
   box.innerHTML=h;
@@ -269,14 +379,14 @@ function renderGrupos(){
   const p=document.getElementById("panel-grupos");
   const groups=[...new Set(DATA.groups.map(g=>g.group))].sort();
   const st=window._g||(window._g={g:groups[0]});
-  p.innerHTML=`<div class="filters"><select id="gg">${groups.map(g=>`<option ${g===st.g?"selected":""}>Grupo ${g}</option>`).join("")}</select></div><div id="gtable"></div>`;
-  p.querySelector("#gg").onchange=e=>{st.g=e.target.value.replace("Grupo ","");drawGroup();};
+  p.innerHTML=`<div class="filters"><select id="gg">${groups.map(g=>`<option value="${g}"${g===st.g?" selected":""}>${t("group")} ${g}</option>`).join("")}</select></div><div id="gtable"></div>`;
+  p.querySelector("#gg").onchange=e=>{st.g=e.target.value;drawGroup();};
   drawGroup();
 }
 function drawGroup(){
   const st=window._g, box=document.getElementById("gtable"); if(!box)return;
   const rows=DATA.groups.filter(g=>g.group===st.g).sort((a,b)=>b.exp_pts-a.exp_pts);
-  box.innerHTML=`<table><tr><th>Equipo</th><th>Pts esp.</th><th>GF</th><th>DG</th><th>P(1º)</th><th>P(2º)</th><th>P(3º clasif.)</th><th>P(avanza)</th></tr>`+
+  box.innerHTML=`<table><tr><th>${t("th_team")}</th><th>${t("th_exp_pts")}</th><th>${t("th_gf")}</th><th>${t("th_gd")}</th><th>${t("th_1st")}</th><th>${t("th_2nd")}</th><th>${t("th_3rd")}</th><th>${t("th_advance")}</th></tr>`+
     rows.map(r=>`<tr><td>${flag(r.team)}</td><td>${r.exp_pts.toFixed(2)}</td><td>${r.exp_gf.toFixed(1)}</td>
       <td>${r.exp_gd>0?"+":""}${r.exp_gd.toFixed(1)}</td><td style="color:${C.home};font-weight:700">${pct(r.p_1st)}</td>
       <td>${pct(r.p_2nd)}</td><td style="color:${C.gold}">${pct(r.p_3rd_qualifies)}</td>
@@ -288,16 +398,16 @@ function renderKO(){
   const p=document.getElementById("panel-eliminatorias");
   const rounds=["R32","Octavos","Cuartos","Semifinal","Final"];
   const st=window._k||(window._k={r:"R32"});
-  p.innerHTML=`<div class="seg">${rounds.map(r=>`<button class="${r===st.r?"active":""}" data-r="${r}">${r}</button>`).join("")}</div><div id="kbox"></div>`;
+  p.innerHTML=`<div class="seg">${rounds.map(r=>`<button class="${r===st.r?"active":""}" data-r="${r}">${t("rounds")[r]}</button>`).join("")}</div><div id="kbox"></div>`;
   p.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{st.r=b.dataset.r;renderKO();});
   const sub=DATA.knockout.filter(k=>k.round===st.r&&k.rank===1).sort((a,b)=>a.match-b.match);
   document.getElementById("kbox").innerHTML=`<div class="grid">`+sub.map(r=>{
     const fav=r.p_home_advances>=0.5?r.home:r.away, pf=Math.max(r.p_home_advances,1-r.p_home_advances);
     const gold=st.r==="Final"?"color:#eab308":"";
     return `<div class="mcard">
-      <div class="mlabel"><span style="${gold}">${st.r==="Final"?"★ ":""}${st.r} · Partido ${r.match} · ${fechaLinda(r.date)}</span><span>P(cruce) ${pct(r.p_pairing)}</span></div>
-      <div class="mteams"><span class="mteam">${flag(r.home)}</span><span class="mvs">vs</span><span class="mteam">${flag(r.away)}</span></div>
-      <div style="margin:8px 0 2px">Avanza <b>${flag(fav)}</b> <span style="color:${C.home};font-size:19px;font-weight:800">${pct(pf)}</span></div>
+      <div class="mlabel"><span style="${gold}">${st.r==="Final"?"★ ":""}${t("rounds")[st.r]} · ${t("ko_match")} ${r.match} · ${fechaLinda(r.date)}</span><span>${t("ko_pairing")} ${pct(r.p_pairing)}</span></div>
+      <div class="mteams"><span class="mteam">${flag(r.home)}</span><span class="mvs">${t("vs")}</span><span class="mteam">${flag(r.away)}</span></div>
+      <div style="margin:8px 0 2px">${t("ko_advances")} <b>${flag(fav)}</b> <span style="color:${C.home};font-size:19px;font-weight:800">${pct(pf)}</span></div>
       <div class="chips"><span class="chip">xG ${r.xg_home.toFixed(2)} – ${r.xg_away.toFixed(2)}</span><span class="chip hot">90': ${r.score_mode} (${pct(r.p_score_mode)})</span></div>
     </div>`;}).join("")+`</div>`;
 }
@@ -306,19 +416,19 @@ function renderKO(){
 let raceChart,calibChart;
 function renderTitulo(){
   const p=document.getElementById("panel-titulo");
-  if(!DATA.champion_history.length){p.innerHTML=`<div class="info">Sin historial todavía.</div>`;return;}
+  if(!DATA.champion_history.length){p.innerHTML=`<div class="info">${t("no_history")}</div>`;return;}
   p.innerHTML=`<div class="chartbox"><canvas id="raceCanvas" height="110"></canvas></div>
-    <div class="chartbox"><h3 style="margin:0 0 10px;font-size:15px">P(campeón) actual</h3><div id="raceBars"></div></div>`;
+    <div class="chartbox"><h3 style="margin:0 0 10px;font-size:15px">${t("pchamp_now")}</h3><div id="raceBars"></div></div>`;
   const dates=[...new Set(DATA.champion_history.map(h=>h.date))].sort();
   const last=dates[dates.length-1];
   const top=DATA.champion_history.filter(h=>h.date===last).sort((a,b)=>b.champion-a.champion).slice(0,8).map(h=>h.team);
   const palette=["#22c55e","#eab308","#3b82f6","#e6e6e6","#e59866","#af7ac5","#76d7c4","#f1948a"];
-  const ds=top.map((t,i)=>({label:t,data:dates.map(d=>{const r=DATA.champion_history.find(h=>h.date===d&&h.team===t);return r?+(r.champion*100).toFixed(1):null;}),
+  const ds=top.map((tm,i)=>({label:teamName(tm),data:dates.map(d=>{const r=DATA.champion_history.find(h=>h.date===d&&h.team===tm);return r?+(r.champion*100).toFixed(1):null;}),
     borderColor:palette[i%8],backgroundColor:palette[i%8],tension:.3,borderWidth:2,pointRadius:2}));
   if(raceChart)raceChart.destroy();
   raceChart=new Chart(document.getElementById("raceCanvas"),{type:"line",
     data:{labels:dates,datasets:ds},
-    options:{plugins:{legend:{labels:{color:C.text}},title:{display:true,text:"P(campeón) jornada a jornada",color:C.text}},
+    options:{plugins:{legend:{labels:{color:C.text}},title:{display:true,text:t("pchamp_byday"),color:C.text}},
       scales:{x:{ticks:{color:C.muted},grid:{color:C.border}},y:{ticks:{color:C.muted,callback:v=>v+"%"},grid:{color:C.border}}}}});
   const now=DATA.champion_now.slice(0,15);
   const max=now[0]?now[0].champion:1;
@@ -331,30 +441,57 @@ function renderTitulo(){
 function renderSalud(){
   const p=document.getElementById("panel-salud");
   const c=DATA.calibration;
-  if(!c.length){p.innerHTML=`<div class="info">⏳ Aún no hay partidos terminados: la calibración en vivo aparecerá tras la primera jornada.</div>`;return;}
+  if(!c.length){p.innerHTML=`<div class="info">${t("health_wait")}</div>`;return;}
   const last=c[c.length-1];
   const hits=c.filter(r=>r.hit).length;
   p.innerHTML=`<div class="tiles">
-      <div class="tile"><div class="l">Partidos evaluados</div><div class="v">${c.length}</div></div>
-      <div class="tile"><div class="l">Log-loss acumulado</div><div class="v ok">${last.log_loss_acum.toFixed(4)}</div><div class="d">vs 1.0986 uniforme</div></div>
-      <div class="tile"><div class="l">Aciertos (modal)</div><div class="v">${Math.round(hits/c.length*100)}% (${hits}/${c.length})</div></div>
+      <div class="tile"><div class="l">${t("evaluated")}</div><div class="v">${c.length}</div></div>
+      <div class="tile"><div class="l">${t("logloss_cum")}</div><div class="v ok">${last.log_loss_acum.toFixed(4)}</div><div class="d">${t("vs_uniform")}</div></div>
+      <div class="tile"><div class="l">${t("hits")}</div><div class="v">${Math.round(hits/c.length*100)}% (${hits}/${c.length})</div></div>
     </div>
     <div class="chartbox"><canvas id="calibCanvas" height="90"></canvas></div>
-    <table><tr><th>Partido</th><th>Real</th><th>Salió</th><th>Log-loss</th></tr>`+
+    <table><tr><th>${t("th_match")}</th><th>${t("th_real")}</th><th>${t("th_got")}</th><th>${t("th_logloss")}</th></tr>`+
     c.map(r=>`<tr><td>${flag(r.home)} – ${flag(r.away)}</td><td>${r.result}</td>
       <td style="color:${r.hit?C.home:C.muted}">${r.outcome}${r.hit?" ✓":""}</td>
       <td style="color:${r.hit?C.home:C.danger}">${r.log_loss.toFixed(3)}</td></tr>`).join("")+`</table>`;
   if(calibChart)calibChart.destroy();
   calibChart=new Chart(document.getElementById("calibCanvas"),{type:"line",
     data:{labels:c.map((_,i)=>i+1),datasets:[
-      {label:"log-loss acumulado",data:c.map(r=>+r.log_loss_acum.toFixed(4)),borderColor:C.home,tension:.3,borderWidth:2},
-      {label:"uniforme (1.0986)",data:c.map(()=>1.0986),borderColor:C.muted,borderDash:[5,5],borderWidth:1,pointRadius:0}]},
-    options:{plugins:{legend:{labels:{color:C.text}},title:{display:true,text:"Log-loss acumulado vs baseline",color:C.text}},
+      {label:t("cal_cum"),data:c.map(r=>+r.log_loss_acum.toFixed(4)),borderColor:C.home,tension:.3,borderWidth:2},
+      {label:t("cal_unif"),data:c.map(()=>1.0986),borderColor:C.muted,borderDash:[5,5],borderWidth:1,pointRadius:0}]},
+    options:{plugins:{legend:{labels:{color:C.text}},title:{display:true,text:t("cal_title"),color:C.text}},
       scales:{x:{ticks:{color:C.muted},grid:{color:C.border}},y:{ticks:{color:C.muted},grid:{color:C.border}}}}});
 }
 
+// ---- pestaña Información ----
+function renderInfo(){
+  const p=document.getElementById("panel-info");
+  const mi=DATA.model_info||{};
+  const models=(mi.models||[]).map(m=>{
+    const params=(localize(m.params)||[]).map(x=>`<li>${x}</li>`).join("");
+    return `<div class="infobox">
+      <h3>${localize(m.name)}</h3>
+      <p>${localize(m.desc)}</p>
+      ${m.formula?`<div class="tag">${t("info_formulas")}</div><div class="formula">${m.formula}</div>`:""}
+      ${params?`<div class="tag">${t("info_params")}</div><ul>${params}</ul>`:""}
+    </div>`;}).join("");
+  const sources=(mi.sources||[]).map(s=>`<div class="src">
+      <a href="${s.url}" target="_blank" rel="noopener">${s.name}${s.optional?` · ${t("info_optional")}`:""}</a>
+      <span class="u">${s.url}</span>
+      <span>${localize(s.use)}</span>
+    </div>`).join("");
+  p.innerHTML=`
+    ${mi.intro?`<div class="infobox"><p>${localize(mi.intro)}</p></div>`:""}
+    <div class="datehdr">🧮 ${t("info_models")}</div>
+    ${models}
+    <div class="datehdr">🛰️ ${t("info_sources")}</div>
+    <div class="infobox">${sources}</div>
+    <div class="datehdr">🔄 ${t("info_pipeline")}</div>
+    <div class="infobox"><p>${localize(mi.pipeline)}</p></div>`;
+}
+
 // ---- navegación ----
-const renderers={partidos:renderPartidos,grupos:renderGrupos,eliminatorias:renderKO,titulo:renderTitulo,salud:renderSalud};
+const renderers={partidos:renderPartidos,grupos:renderGrupos,eliminatorias:renderKO,titulo:renderTitulo,salud:renderSalud,info:renderInfo};
 let current="partidos";
 document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>{
   current=b.dataset.tab;
@@ -363,8 +500,17 @@ document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>{
   renderers[current]();
 });
 
+// ---- idioma ----
+function renderAll(){renderPartidos();renderGrupos();renderKO();renderTitulo();renderSalud();renderInfo();}
+function setLang(lang){
+  LANG=lang; localStorage.setItem("mundial_lang",lang);
+  applyChrome(); renderAll();
+}
+document.querySelectorAll("#langtog button").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+
 // ---- init ----
-renderPartidos();renderGrupos();renderKO();renderTitulo();renderSalud();
+applyChrome();
+renderAll();
 fetchLive().then(()=>{if(current==="partidos")renderPartidos();});
 setInterval(()=>fetchLive().then(()=>{if(current==="partidos")drawList();}),60000);
 </script>

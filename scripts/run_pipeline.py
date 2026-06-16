@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 import pandas as pd
 import yaml
 
-from mundial.config import ROOT, settings, tournament
+from mundial.config import ROOT, model_info, settings, team_es, tournament
 from mundial.evaluate import backtest
 from mundial.features import elo
 from mundial.forecast import match_forecast
@@ -162,14 +162,14 @@ def main():
                     if r.kickoff_utc else str(r.date))
             scorelines = (f"{r.score_1} ({r.p_score_1:.0%}), {r.score_2} ({r.p_score_2:.0%}), "
                           f"{r.score_3} ({r.p_score_3:.0%})")
-            L.append(f"| {hora} | **{r.home}** vs **{r.away}**{res} | {fmt_pct(r.p_home)} "
+            L.append(f"| {hora} | **{team_es(r.home)}** vs **{team_es(r.away)}**{res} | {fmt_pct(r.p_home)} "
                      f"| {fmt_pct(r.p_draw)} | {fmt_pct(r.p_away)} | {r.xg_home:.2f} - {r.xg_away:.2f} "
                      f"| {scorelines} | {fmt_pct(r['p_over_2.5'])} | {fmt_pct(r.p_btts)} |")
         # mini tabla del grupo
         L.append("\n| Posición esperada | Pts esp. | P(1º) | P(2º) | P(3º clasifica) | P(avanza) |")
         L.append("|---|---|---|---|---|---|")
         for team, t in groups_df[groups_df["group"] == g].iterrows():
-            L.append(f"| {team} | {t.exp_pts:.2f} | {fmt_pct(t.p_1st)} | {fmt_pct(t.p_2nd)} "
+            L.append(f"| {team_es(team)} | {t.exp_pts:.2f} | {fmt_pct(t.p_1st)} | {fmt_pct(t.p_2nd)} "
                      f"| {fmt_pct(t.p_3rd_qualifies)} | {fmt_pct(t.p_advance)} |")
         L.append("")
 
@@ -186,10 +186,10 @@ def main():
             top = mm.iloc[0]
             fav = top.home if top.p_home_advances >= 0.5 else top.away
             p_fav = max(top.p_home_advances, 1 - top.p_home_advances)
-            alts = "; ".join(f"{r.home}–{r.away} ({r.p_pairing:.0%})"
+            alts = "; ".join(f"{team_es(r.home)}–{team_es(r.away)} ({r.p_pairing:.0%})"
                              for _, r in mm.iloc[1:3].iterrows())
-            L.append(f"| {mno} | {top.date} | **{top.home}** vs **{top.away}** "
-                     f"| {top.p_pairing:.0%} | {fav} ({p_fav:.0%}) "
+            L.append(f"| {mno} | {top.date} | **{team_es(top.home)}** vs **{team_es(top.away)}** "
+                     f"| {top.p_pairing:.0%} | {team_es(fav)} ({p_fav:.0%}) "
                      f"| {top.xg_home:.2f} - {top.xg_away:.2f} "
                      f"| {top.score_mode} ({top.p_score_mode:.0%}) | {alts} |")
         L.append("")
@@ -198,7 +198,29 @@ def main():
     L.append("| Selección | Grupo | Campeón | Final | Semis |")
     L.append("|---|---|---|---|---|")
     for team, r in probs.head(10).iterrows():
-        L.append(f"| {team} | {r.group} | {r.champion:.1%} | {r['final']:.1%} | {r.sf:.1%} |")
+        L.append(f"| {team_es(team)} | {r.group} | {r.champion:.1%} | {r['final']:.1%} | {r.sf:.1%} |")
+
+    # Información del modelo (fuente: config/model_info.yaml, idioma español)
+    mi = model_info()
+
+    def _es(v):
+        return v.get("es", "") if isinstance(v, dict) else v
+
+    L.append("\n## Información del modelo\n")
+    L.append(_es(mi.get("intro", "")) + "\n")
+    L.append("### Modelos\n")
+    for m in mi.get("models", []):
+        L.append(f"**{_es(m['name'])}** — {_es(m.get('desc', ''))}")
+        if m.get("formula"):
+            L.append(f"\n> Fórmula: `{m['formula']}`")
+        for p in _es(m.get("params", [])) or []:
+            L.append(f"- {p}")
+        L.append("")
+    L.append("### Fuentes de datos\n")
+    for s in mi.get("sources", []):
+        opt = " (opcional)" if s.get("optional") else ""
+        L.append(f"- **[{s['name']}]({s['url']})**{opt}: {_es(s.get('use', ''))}")
+    L.append(f"\n### Cómo se actualiza\n\n{_es(mi.get('pipeline', ''))}")
     (ROOT / "REPORT.md").write_text("\n".join(L) + "\n")
     print("      match_forecasts.csv, group_tables.csv, knockout_forecasts.csv,")
     print("      tournament_probabilities.csv, REPORT.md, prediction_log.csv")

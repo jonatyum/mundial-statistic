@@ -9,7 +9,7 @@ from pathlib import Path
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 
-from mundial.config import ROOT, settings
+from mundial.config import ROOT, model_info, settings, team_names_es
 
 app = FastAPI(title="Mundial 2026 — Predicciones", version="0.2.0")
 PROC = ROOT / settings()["paths"]["processed"]
@@ -35,6 +35,13 @@ def _payload(name: str, df: pd.DataFrame, updated: str) -> dict:
                if len(df) else [])
     return {"source": name, "last_updated": updated, "model_version": version,
             "n": len(df), "data": records}
+
+
+@app.get("/info")
+def info():
+    """Modelos, fórmulas y fuentes de datos (config/model_info.yaml). Bilingüe (es/en).
+    Incluye el mapeo de nombres de selecciones a español (canónico inglés -> es)."""
+    return {**model_info(), "team_names_es": team_names_es()}
 
 
 @app.get("/health")

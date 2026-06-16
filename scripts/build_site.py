@@ -11,10 +11,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 PROC = ROOT / "data" / "processed"
 DOCS = ROOT / "docs"
+CONFIG = ROOT / "config"
 
 FLAG = {
     "Mexico": "🇲🇽", "South Africa": "🇿🇦", "South Korea": "🇰🇷", "Czech Republic": "🇨🇿",
@@ -63,6 +65,9 @@ def main():
     version = matches["model_version"].iloc[0] if len(matches) else "—"
     updated = datetime.now(timezone.utc).strftime("%d-%b %H:%M UTC")
 
+    teams = yaml.safe_load((CONFIG / "teams.yaml").read_text())
+    model_info = yaml.safe_load((CONFIG / "model_info.yaml").read_text())
+
     data = {
         "generated": updated,
         "version": str(version),
@@ -74,6 +79,8 @@ def main():
         "calibration": records(load("calibration")),
         "flags": FLAG,
         "aliases": ALIASES,
+        "names_es": teams.get("names_es", {}),
+        "model_info": model_info,
     }
 
     template = (Path(__file__).parent / "site_template.html").read_text()

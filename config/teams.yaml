@@ -19,3 +19,55 @@ aliases:
   "Curacao": "Curaçao"
   "Saint Kitts and Nevis": St. Kitts and Nevis
   "Republic of Ireland": Ireland
+
+# Nombre para mostrar en español (canónico -> ES). El canónico (inglés) se sigue
+# usando como clave interna y para casar marcadores en vivo; esto es solo display.
+names_es:
+  Mexico: México
+  South Africa: Sudáfrica
+  South Korea: Corea del Sur
+  Czech Republic: República Checa
+  Canada: Canadá
+  Bosnia and Herzegovina: Bosnia y Herzegovina
+  Qatar: Catar
+  Switzerland: Suiza
+  Brazil: Brasil
+  Morocco: Marruecos
+  Haiti: Haití
+  Scotland: Escocia
+  United States: Estados Unidos
+  Paraguay: Paraguay
+  Turkey: Turquía
+  Australia: Australia
+  Germany: Alemania
+  Ecuador: Ecuador
+  Ivory Coast: Costa de Marfil
+  Curaçao: Curazao
+  Netherlands: Países Bajos
+  Japan: Japón
+  Sweden: Suecia
+  Tunisia: Túnez
+  Belgium: Bélgica
+  Iran: Irán
+  Egypt: Egipto
+  New Zealand: Nueva Zelanda
+  Spain: España
+  Uruguay: Uruguay
+  Saudi Arabia: Arabia Saudita
+  Cape Verde: Cabo Verde
+  France: Francia
+  Senegal: Senegal
+  Norway: Noruega
+  Iraq: Irak
+  Argentina: Argentina
+  Austria: Austria
+  Algeria: Argelia
+  Jordan: Jordania
+  Portugal: Portugal
+  Colombia: Colombia
+  Uzbekistan: Uzbekistán
+  DR Congo: RD Congo
+  England: Inglaterra
+  Croatia: Croacia
+  Panama: Panamá
+  Ghana: Ghana
