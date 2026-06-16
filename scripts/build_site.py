@@ -63,13 +63,15 @@ def records(df: pd.DataFrame, rename_first=None) -> list[dict]:
 def main():
     matches = load("match_forecasts")
     version = matches["model_version"].iloc[0] if len(matches) else "—"
-    updated = datetime.now(timezone.utc).strftime("%d-%b %H:%M UTC")
+    now = datetime.now(timezone.utc)
+    updated = now.strftime("%d-%b %H:%M UTC")
 
     teams = yaml.safe_load((CONFIG / "teams.yaml").read_text())
     model_info = yaml.safe_load((CONFIG / "model_info.yaml").read_text())
 
     data = {
         "generated": updated,
+        "generated_iso": now.isoformat(),
         "version": str(version),
         "matches": records(matches),
         "groups": records(load("group_tables"), "team"),
