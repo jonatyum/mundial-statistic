@@ -30,10 +30,10 @@
   .infobox ul{margin:8px 0 0;padding-left:18px;color:var(--muted)}
   .infobox ul li{margin:2px 0}
   .infobox p{margin:6px 0;color:var(--text)}
-  .src{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-bottom:1px solid var(--s2)}
+  .src{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-bottom:1px solid var(--s2);min-width:0}
   .src:last-child{border:none}
-  .src a{color:var(--away);font-weight:600;word-break:break-all}
-  .src .u{color:var(--muted);font-size:13px}
+  .src a{color:var(--away);font-weight:600;overflow-wrap:anywhere;word-break:break-word}
+  .src .u{color:var(--muted);font-size:13px;overflow-wrap:anywhere;word-break:break-word}
   nav{display:flex;gap:4px;flex-wrap:wrap;padding:10px 24px;background:var(--surface);
     border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
   nav button{background:none;border:none;color:var(--muted);font:600 13px system-ui;
