@@ -1,0 +1,129 @@
+# Información del modelo, fórmulas y fuentes de datos.
+# Fuente ÚNICA consumida por el sitio estático, el dashboard, la API (/info) y REPORT.md.
+# Cadenas con clave {es, en} se traducen según el idioma activo; las fórmulas y URLs
+# son neutrales al idioma.
+
+intro:
+  es: >-
+    Las predicciones combinan dos modelos estadísticos entrenados sobre todo el
+    histórico de partidos internacionales y se proyectan al torneo completo con
+    simulación Monte Carlo. No hay opiniones ni ajustes manuales: todo sale de los datos.
+  en: >-
+    The predictions combine two statistical models trained on the full history of
+    international matches and projected over the whole tournament with a Monte Carlo
+    simulation. No opinions or manual tweaks: everything comes from the data.
+
+models:
+  - name: Elo-Davidson
+    desc:
+      es: >-
+        Calcula la fuerza (rating Elo) de cada selección desde todo el histórico
+        (1872 en adelante). La extensión de Davidson reparte la probabilidad entre
+        local, empate y visitante en lugar de solo ganar/perder.
+      en: >-
+        Computes each team's strength (Elo rating) from the full history (1872
+        onward). The Davidson extension splits probability across home win, draw and
+        away win instead of just win/lose.
+    formula: "P(local) = 1 / (1 + 10^((Eloᵥ − Eloₗ − ventaja_local) / 400))"
+    params:
+      es:
+        - "K por torneo: Mundial 60, continental 50, clasificatorio 40, amistoso 20"
+        - "Ventaja de local: +80 puntos Elo (no en sede neutral)"
+        - "ν (peso del empate): estimado por máxima verosimilitud sobre el histórico"
+      en:
+        - "K by competition: World Cup 60, continental 50, qualifier 40, friendly 20"
+        - "Home advantage: +80 Elo points (not on neutral ground)"
+        - "ν (draw weight): estimated by maximum likelihood over the history"
+  - name: Dixon-Coles
+    desc:
+      es: >-
+        Modelo de Poisson bivariado para los goles de cada equipo. Estima fuerzas de
+        ataque y defensa por selección, una ventaja de local (γ) y una corrección (ρ)
+        para los marcadores bajos (0-0, 1-0, 0-1, 1-1) que un Poisson simple subestima.
+      en: >-
+        Bivariate Poisson model for each team's goals. It estimates attack and defence
+        strengths per team, a home advantage (γ) and a correction (ρ) for low scores
+        (0-0, 1-0, 0-1, 1-1) that a plain Poisson underestimates.
+    formula: "λ_local = exp(μ + ataqueₗ − defensaᵥ + log γ);  λ_visit = exp(μ + ataqueᵥ − defensaₗ)"
+    params:
+      es:
+        - "Decaimiento temporal ξ = 0.0019 por día (los partidos viejos pesan menos)"
+        - "Ventana de entrenamiento: 8 años hacia atrás"
+        - "Matriz de marcadores truncada a 10 goles por equipo"
+      en:
+        - "Time decay ξ = 0.0019 per day (older matches weigh less)"
+        - "Training window: 8 years back"
+        - "Scoreline matrix truncated at 10 goals per team"
+  - name:
+      es: Ensamble
+      en: Ensemble
+    desc:
+      es: >-
+        La probabilidad final de cada partido es una mezcla ponderada de Elo-Davidson
+        y Dixon-Coles. El peso se elige por backtest sobre los Mundiales 2018 y 2022
+        (minimiza el log-loss), no se fija a mano.
+      en: >-
+        The final per-match probability is a weighted blend of Elo-Davidson and
+        Dixon-Coles. The weight is chosen by backtesting on the 2018 and 2022 World
+        Cups (minimising log-loss), not set by hand.
+    formula: "P = w · P_elo + (1 − w) · P_dixoncoles"
+    params:
+      es: ["w se recalibra en cada actualización"]
+      en: ["w is recalibrated on every update"]
+  - name:
+      es: Simulación Monte Carlo
+      en: Monte Carlo simulation
+    desc:
+      es: >-
+        Se simula el torneo completo 100 000 veces (fase de grupos, asignación de
+        terceros, llaves de eliminatorias, prórroga y penales). Las probabilidades de
+        avanzar, llegar a la final y ser campeón son la frecuencia en esas simulaciones.
+      en: >-
+        The full tournament is simulated 100,000 times (group stage, third-place
+        allocation, knockout bracket, extra time and penalties). The odds of advancing,
+        reaching the final and winning are the frequency across those simulations.
+    formula: "P(evento) ≈ (nº de simulaciones con el evento) / 100 000"
+    params:
+      es: ["Prórroga: λ ≈ (30/90) · 0.31", "Penales: base 0.5 ajustada por Elo"]
+      en: ["Extra time: λ ≈ (30/90) · 0.31", "Penalties: base 0.5 adjusted by Elo"]
+
+sources:
+  - name: martj42/international_results
+    url: https://github.com/martj42/international_results
+    use:
+      es: >-
+        Histórico completo de resultados internacionales (1872+) y el calendario real
+        del Mundial 2026. Es el dataset de Kaggle "International football results",
+        leído desde su mirror en GitHub (sin API key).
+      en: >-
+        Full history of international results (1872+) and the real 2026 World Cup
+        fixture list. It is the Kaggle "International football results" dataset, read
+        from its GitHub mirror (no API key).
+  - name: ESPN Scoreboard API
+    url: https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard
+    use:
+      es: >-
+        Marcadores en vivo y resultados finales, leídos desde el navegador cada 60 s.
+        Solo para mostrar el marcador: no alimenta el modelo hasta que el partido
+        termina.
+      en: >-
+        Live scores and final results, fetched from the browser every 60 s. Display
+        only: it does not feed the model until the match is over.
+  - name: the-odds-api.com
+    url: https://the-odds-api.com
+    optional: true
+    use:
+      es: "Cuotas de casas de apuestas para comparar (opcional, requiere API key)."
+      en: "Bookmaker odds for comparison (optional, requires an API key)."
+
+pipeline:
+  es: >-
+    Tras cada jornada: se re-descargan los resultados, se reentrenan Elo y Dixon-Coles,
+    se recalibra el peso del ensamble y se vuelve a simular el torneo. Las predicciones
+    de cada partido se congelan al inicio del mismo y quedan en un registro público
+    para poder evaluar la calibración del modelo.
+  en: >-
+    After each matchday: results are re-downloaded, Elo and Dixon-Coles are retrained,
+    the ensemble weight is recalibrated and the tournament is re-simulated. Each match's
+    prediction is frozen at kickoff and kept in a public log so the model's calibration
+    can be evaluated.
