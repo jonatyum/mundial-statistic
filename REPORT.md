@@ -1,6 +1,6 @@
 # Mundial 2026 — Pronóstico partido a partido
 
-Generado: 2026-08-20 23:31 UTC · modelo `0.2.0+c618816` · 100,000 simulaciones · ensamble w(elo)=0.50
+Generado: 2026-08-21 06:56 UTC · modelo `0.2.0+d56544b` · 100,000 simulaciones · ensamble w(elo)=0.50
 
 ## Fase de grupos (72 partidos)
 
@@ -9,7 +9,7 @@ Generado: 2026-08-20 23:31 UTC · modelo `0.2.0+c618816` · 100,000 simulaciones
 | Fecha (UTC) | Partido | 1 | X | 2 | Goles esperados | Marcadores probables | +2.5 | Ambos anotan |
 |---|---|---|---|---|---|---|---|---|
 | 2026-06-30 | **México** vs **Ecuador** (2-0) | 47% | 30% | 23% | 1.13 - 0.71 | 1-0 (19%), 0-0 (15%), 1-1 (12%) | 28% | 34% |
-| 2026-07-05 | **México** vs **Inglaterra** (2-3) | 32% | 28% | 40% | 1.26 - 1.37 | 1-1 (13%), 0-1 (10%), 1-2 (9%) | 49% | 54% |
+| 2026-07-05 | **México** vs **Inglaterra** (2-3) | 32% | 28% | 40% | 1.27 - 1.37 | 1-1 (13%), 0-1 (10%), 1-2 (9%) | 49% | 54% |
 | 2026-06-28 | **Sudáfrica** vs **Canadá** (0-1) | 23% | 29% | 47% | 0.76 - 1.18 | 0-1 (18%), 0-0 (14%), 1-1 (12%) | 31% | 37% |
 | 2026-06-11 19:00 | **México** vs **Sudáfrica** (2-0) | 68% | 22% | 11% | 1.78 - 0.62 | 1-0 (17%), 2-0 (15%), 2-1 (10%) | 43% | 40% |
 | 2026-06-11 02:00 | **Corea del Sur** vs **República Checa** (2-1) | 45% | 27% | 28% | 1.52 - 1.15 | 1-1 (13%), 1-0 (10%), 2-1 (9%) | 50% | 54% |
@@ -155,7 +155,7 @@ Generado: 2026-08-20 23:31 UTC · modelo `0.2.0+c618816` · 100,000 simulaciones
 | 2026-07-10 | **España** vs **Bélgica** (2-1) | 58% | 25% | 17% | 1.68 - 0.88 | 1-0 (14%), 1-1 (12%), 2-0 (11%) | 47% | 49% |
 | 2026-06-15 16:00 | **España** vs **Cabo Verde** (0-0) | 80% | 15% | 5% | 2.17 - 0.50 | 2-0 (17%), 1-0 (17%), 3-0 (11%) | 50% | 37% |
 | 2026-06-15 22:00 | **Arabia Saudita** vs **Uruguay** (1-1) | 20% | 29% | 51% | 0.66 - 1.18 | 0-1 (20%), 0-0 (15%), 1-1 (12%) | 28% | 33% |
-| 2026-06-21 16:00 | **España** vs **Arabia Saudita** (4-0) | 79% | 16% | 5% | 2.05 - 0.44 | 1-0 (19%), 2-0 (18%), 3-0 (11%) | 46% | 33% |
+| 2026-06-21 16:00 | **España** vs **Arabia Saudita** (4-0) | 79% | 16% | 5% | 2.05 - 0.45 | 1-0 (19%), 2-0 (18%), 3-0 (11%) | 46% | 33% |
 | 2026-06-21 22:00 | **Uruguay** vs **Cabo Verde** (2-2) | 51% | 28% | 21% | 1.26 - 0.73 | 1-0 (19%), 0-0 (13%), 1-1 (12%) | 32% | 37% |
 | 2026-06-26 00:00 | **Uruguay** vs **España** (0-1) | 11% | 23% | 66% | 0.51 - 1.56 | 0-1 (22%), 0-2 (16%), 0-0 (12%) | 34% | 33% |
 | 2026-06-26 00:00 | **Cabo Verde** vs **Arabia Saudita** (0-0) | 35% | 30% | 35% | 1.06 - 1.04 | 1-1 (13%), 0-1 (13%), 1-0 (13%) | 35% | 42% |
@@ -199,7 +199,7 @@ Generado: 2026-08-20 23:31 UTC · modelo `0.2.0+c618816` · 100,000 simulaciones
 | 2026-07-11 | **Argentina** vs **Suiza** (3-1) | 58% | 25% | 18% | 1.70 - 0.87 | 1-0 (13%), 1-1 (12%), 2-0 (11%) | 48% | 49% |
 | 2026-06-16 01:00 | **Argentina** vs **Argelia** (3-0) | 64% | 23% | 13% | 1.83 - 0.82 | 1-0 (14%), 2-0 (12%), 2-1 (12%) | 50% | 49% |
 | 2026-06-16 04:00 | **Austria** vs **Jordania** (3-1) | 52% | 25% | 23% | 1.81 - 1.16 | 1-1 (12%), 2-1 (10%), 1-0 (9%) | 57% | 59% |
-| 2026-06-22 17:00 | **Argentina** vs **Austria** (2-0) | 66% | 22% | 12% | 1.91 - 0.78 | 1-0 (13%), 2-0 (13%), 2-1 (11%) | 50% | 47% |
+| 2026-06-22 17:00 | **Argentina** vs **Austria** (2-0) | 66% | 22% | 12% | 1.91 - 0.78 | 1-0 (13%), 2-0 (13%), 2-1 (11%) | 50% | 48% |
 | 2026-06-22 03:00 | **Jordania** vs **Argelia** (1-2) | 22% | 24% | 54% | 1.13 - 1.94 | 1-1 (11%), 1-2 (9%), 0-2 (8%) | 59% | 59% |
 | 2026-06-27 02:00 | **Jordania** vs **Argentina** (1-3) | 6% | 16% | 78% | 0.72 - 2.54 | 0-2 (13%), 0-3 (10%), 0-1 (10%) | 63% | 49% |
 | 2026-06-27 02:00 | **Argelia** vs **Austria** (3-3) | 38% | 28% | 35% | 1.39 - 1.27 | 1-1 (13%), 0-1 (9%), 1-2 (8%) | 50% | 55% |
@@ -215,10 +215,10 @@ Generado: 2026-08-20 23:31 UTC · modelo `0.2.0+c618816` · 100,000 simulaciones
 
 | Fecha (UTC) | Partido | 1 | X | 2 | Goles esperados | Marcadores probables | +2.5 | Ambos anotan |
 |---|---|---|---|---|---|---|---|---|
-| 2026-07-02 | **Portugal** vs **Croacia** (2-1) | 49% | 26% | 24% | 1.61 - 1.04 | 1-1 (13%), 1-0 (10%), 2-1 (9%) | 49% | 52% |
+| 2026-07-02 | **Portugal** vs **Croacia** (2-1) | 49% | 26% | 24% | 1.61 - 1.04 | 1-1 (13%), 1-0 (10%), 2-1 (9%) | 49% | 53% |
 | 2026-07-03 | **Colombia** vs **Ghana** (1-0) | 66% | 23% | 11% | 1.66 - 0.59 | 1-0 (19%), 2-0 (15%), 2-1 (10%) | 39% | 38% |
 | 2026-07-06 | **Portugal** vs **España** (0-1) | 19% | 26% | 55% | 0.83 - 1.50 | 0-1 (16%), 1-1 (12%), 0-2 (11%) | 41% | 45% |
-| 2026-06-17 17:00 | **Portugal** vs **RD Congo** (1-1) | 55% | 27% | 18% | 1.37 - 0.70 | 1-0 (18%), 0-0 (12%), 2-0 (12%) | 35% | 38% |
+| 2026-06-17 17:00 | **Portugal** vs **RD Congo** (1-1) | 55% | 27% | 18% | 1.37 - 0.71 | 1-0 (18%), 0-0 (12%), 2-0 (12%) | 35% | 38% |
 | 2026-06-17 02:00 | **Uzbekistán** vs **Colombia** (1-3) | 12% | 23% | 65% | 0.68 - 1.79 | 0-1 (16%), 0-2 (14%), 1-1 (10%) | 45% | 42% |
 | 2026-06-23 17:00 | **Portugal** vs **Uzbekistán** (5-0) | 66% | 22% | 12% | 1.93 - 0.74 | 1-0 (13%), 2-0 (13%), 1-1 (10%) | 50% | 46% |
 | 2026-06-23 02:00 | **Colombia** vs **RD Congo** (1-0) | 54% | 28% | 18% | 1.28 - 0.65 | 1-0 (21%), 0-0 (14%), 2-0 (12%) | 31% | 35% |
@@ -260,9 +260,9 @@ Generado: 2026-08-20 23:31 UTC · modelo `0.2.0+c618816` · 100,000 simulaciones
 |---|---|---|---|---|---|---|---|
 | 73 | 2026-06-28 | **Sudáfrica** vs **Canadá** | 100% | Canadá (64%) | 0.76 - 1.18 | 0-1 (18%) |  |
 | 74 | 2026-06-29 | **Alemania** vs **Bosnia y Herzegovina** | 100% | Alemania (81%) | 2.26 - 0.90 | 2-0 (11%) |  |
-| 75 | 2026-06-29 | **Países Bajos** vs **Brasil** | 100% | Brasil (54%) | 1.41 - 1.54 | 1-1 (12%) |  |
-| 76 | 2026-06-29 | **Marruecos** vs **Japón** | 100% | Marruecos (55%) | 1.07 - 0.89 | 1-0 (15%) |  |
-| 77 | 2026-06-30 | **Francia** vs **Paraguay** | 100% | Francia (72%) | 1.60 - 0.81 | 1-0 (15%) |  |
+| 75 | 2026-06-29 | **Países Bajos** vs **Brasil** | 100% | Brasil (53%) | 1.41 - 1.54 | 1-1 (12%) |  |
+| 76 | 2026-06-29 | **Marruecos** vs **Japón** | 100% | Marruecos (56%) | 1.07 - 0.89 | 1-0 (15%) |  |
+| 77 | 2026-06-30 | **Francia** vs **Paraguay** | 100% | Francia (73%) | 1.60 - 0.81 | 1-0 (15%) |  |
 | 78 | 2026-06-30 | **Costa de Marfil** vs **Noruega** | 100% | Noruega (61%) | 1.09 - 1.41 | 1-1 (13%) |  |
 | 79 | 2026-06-30 | **México** vs **Ecuador** | 100% | México (56%) | 0.87 - 0.73 | 0-0 (19%) |  |
 | 80 | 2026-07-01 | **Inglaterra** vs **RD Congo** | 100% | Inglaterra (77%) | 1.52 - 0.67 | 1-0 (19%) |  |
@@ -281,49 +281,49 @@ Generado: 2026-08-20 23:31 UTC · modelo `0.2.0+c618816` · 100,000 simulaciones
 |---|---|---|---|---|---|---|---|
 | 89 | 2026-07-04 | **Alemania** vs **Francia** | 59% | Francia (61%) | 1.45 - 1.86 | 1-1 (11%) | Alemania–Paraguay (22%); Bosnia y Herzegovina–Francia (14%) |
 | 90 | 2026-07-04 | **Canadá** vs **Brasil** | 34% | Brasil (70%) | 0.89 - 1.57 | 0-1 (14%) | Canadá–Países Bajos (30%); Sudáfrica–Brasil (19%) |
-| 91 | 2026-07-05 | **Marruecos** vs **Noruega** | 33% | Marruecos (58%) | 1.34 - 1.03 | 1-1 (13%) | Japón–Noruega (27%); Marruecos–Costa de Marfil (22%) |
+| 91 | 2026-07-05 | **Marruecos** vs **Noruega** | 34% | Marruecos (58%) | 1.34 - 1.03 | 1-1 (13%) | Japón–Noruega (27%); Marruecos–Costa de Marfil (22%) |
 | 92 | 2026-07-05 | **México** vs **Inglaterra** | 43% | Inglaterra (63%) | 0.96 - 1.38 | 0-1 (14%) | Ecuador–Inglaterra (34%); México–RD Congo (13%) |
 | 93 | 2026-07-06 | **Portugal** vs **España** | 54% | España (71%) | 0.83 - 1.50 | 0-1 (16%) | Croacia–España (29%); Portugal–Austria (11%) |
 | 94 | 2026-07-06 | **Argelia** vs **Bélgica** | 36% | Bélgica (62%) | 1.20 - 1.64 | 1-1 (12%) | Estados Unidos–Bélgica (25%); Argelia–Senegal (23%) |
 | 95 | 2026-07-07 | **Argentina** vs **Australia** | 49% | Argentina (77%) | 1.58 - 0.66 | 1-0 (18%) | Argentina–Egipto (41%); Cabo Verde–Australia (6%) |
-| 96 | 2026-07-07 | **Suiza** vs **Colombia** | 58% | Colombia (58%) | 1.05 - 1.31 | 1-1 (13%) | Suecia–Colombia (23%); Suiza–Ghana (13%) |
+| 96 | 2026-07-07 | **Suiza** vs **Colombia** | 58% | Colombia (58%) | 1.05 - 1.31 | 1-1 (13%) | Suecia–Colombia (23%); Suiza–Ghana (14%) |
 
 ### Cuartos
 
 | Partido | Fecha | Cruce más probable | P(cruce) | Avanza | Goles esperados | Marcador 90' | Alternativas |
 |---|---|---|---|---|---|---|---|
 | 97 | 2026-07-09 | **Francia** vs **Brasil** | 19% | Francia (53%) | 1.55 - 1.43 | 1-1 (12%) | Francia–Países Bajos (16%); Alemania–Brasil (15%) |
-| 98 | 2026-07-10 | **España** vs **Bélgica** | 25% | España (74%) | 1.68 - 0.88 | 1-0 (14%) | España–Argelia (15%); España–Senegal (13%) |
+| 98 | 2026-07-10 | **España** vs **Bélgica** | 25% | España (73%) | 1.68 - 0.88 | 1-0 (14%) | España–Argelia (15%); España–Senegal (13%) |
 | 99 | 2026-07-10 | **Marruecos** vs **Inglaterra** | 17% | Inglaterra (56%) | 0.99 - 1.12 | 0-1 (15%) | Noruega–Inglaterra (13%); Japón–Inglaterra (13%) |
-| 100 | 2026-07-11 | **Argentina** vs **Colombia** | 36% | Argentina (65%) | 1.40 - 0.88 | 1-0 (14%) | Argentina–Suiza (24%); Australia–Colombia (8%) |
+| 100 | 2026-07-11 | **Argentina** vs **Colombia** | 36% | Argentina (66%) | 1.40 - 0.88 | 1-0 (14%) | Argentina–Suiza (24%); Australia–Colombia (8%) |
 
 ### Semifinal
 
 | Partido | Fecha | Cruce más probable | P(cruce) | Avanza | Goles esperados | Marcador 90' | Alternativas |
 |---|---|---|---|---|---|---|---|
-| 101 | 2026-07-14 | **Francia** vs **España** | 14% | España (67%) | 0.99 - 1.62 | 1-1 (12%) | Brasil–España (11%); Alemania–España (9%) |
-| 102 | 2026-07-15 | **Inglaterra** vs **Argentina** | 16% | Argentina (59%) | 1.09 - 1.44 | 1-1 (13%) | Marruecos–Argentina (9%); Inglaterra–Colombia (7%) |
+| 101 | 2026-07-14 | **Francia** vs **España** | 14% | España (68%) | 0.99 - 1.62 | 1-1 (12%) | Brasil–España (11%); Alemania–España (9%) |
+| 102 | 2026-07-15 | **Inglaterra** vs **Argentina** | 15% | Argentina (59%) | 1.09 - 1.44 | 1-1 (13%) | Marruecos–Argentina (9%); Inglaterra–Colombia (7%) |
 
 ### Final
 
 | Partido | Fecha | Cruce más probable | P(cruce) | Avanza | Goles esperados | Marcador 90' | Alternativas |
 |---|---|---|---|---|---|---|---|
-| 104 | 2026-07-19 | **España** vs **Argentina** | 12% | España (56%) | 1.18 - 1.02 | 1-1 (13%) | España–Inglaterra (6%); Francia–Argentina (5%) |
+| 104 | 2026-07-19 | **España** vs **Argentina** | 12% | España (55%) | 1.18 - 1.02 | 1-1 (13%) | España–Inglaterra (6%); Francia–Argentina (5%) |
 
 ## Probabilidad de campeón (referencia)
 
 | Selección | Grupo | Campeón | Final | Semis |
 |---|---|---|---|---|
-| España | H | 24.0% | 36.0% | 49.2% |
-| Argentina | J | 20.2% | 33.7% | 50.2% |
-| Inglaterra | L | 8.4% | 16.2% | 30.8% |
-| Francia | I | 6.8% | 13.7% | 28.9% |
-| Colombia | K | 5.4% | 11.9% | 23.0% |
-| Brasil | C | 4.5% | 9.7% | 21.6% |
-| Marruecos | C | 3.9% | 8.4% | 17.9% |
-| Portugal | K | 3.4% | 7.4% | 14.0% |
+| España | H | 23.7% | 35.9% | 49.0% |
+| Argentina | J | 20.3% | 33.5% | 50.2% |
+| Inglaterra | L | 8.4% | 16.3% | 30.6% |
+| Francia | I | 6.8% | 13.6% | 28.9% |
+| Colombia | K | 5.3% | 11.8% | 22.8% |
+| Brasil | C | 4.4% | 9.5% | 21.6% |
+| Marruecos | C | 4.0% | 8.5% | 17.9% |
+| Portugal | K | 3.5% | 7.4% | 14.0% |
 | Bélgica | G | 3.2% | 7.4% | 14.8% |
-| Países Bajos | F | 3.0% | 7.0% | 16.9% |
+| Países Bajos | F | 3.1% | 7.1% | 17.0% |
 
 ## Información del modelo
 
