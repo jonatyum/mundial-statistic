@@ -1,6 +1,6 @@
 # Mundial 2026 — Pronóstico partido a partido
 
-Generado: 2026-10-17 10:27 UTC · modelo `0.2.0+ba72970` · 100,000 simulaciones · ensamble w(elo)=0.50
+Generado: 2026-10-17 17:49 UTC · modelo `0.2.0+aea03a7` · 100,000 simulaciones · ensamble w(elo)=0.50
 
 ## Fase de grupos (72 partidos)
 
